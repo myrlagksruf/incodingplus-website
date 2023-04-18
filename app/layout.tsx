@@ -12,15 +12,15 @@ export const metadata = {
 
 const Header = () => {
   return (<header className='box-content sticky top-0 flex items-center justify-around h-8 p-4 bg-white shadow-md'>
-    <div>
+    <Link href="/">
       <Image
         src={logo}
         alt="logo image"
         height={32}
       />
-    </div>
+    </Link>
     <div className='flex justify-between' style={{minWidth:'450px'}}>
-      <div><Link href="/">학원 소개</Link></div>
+      <div><Link href="/introduce">학원 소개</Link></div>
       <Menu name="커리큘럼" menus={[
         {name:"입시반", href:"/curriculum/ipsi"},
         {name:"코딩 기초", href:"/curriculum/coding_basic"},
