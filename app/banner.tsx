@@ -42,7 +42,7 @@ export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
             left:'max(calc(50% - 600px - 30px), 0px)',
             top:'50%',
             transform:'translateY(-50%)'
-        }} className="absolute" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        }} className="cursor-pointer absolute" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="48" y="48" width="48" height="48" rx="24" transform="rotate(-180 48 48)" fill="black" fillOpacity="0.5"/>
             <path d="M26.586 12.5861L15.172 24.0001L26.586 35.4141L29.414 32.5861L20.828 24.0001L29.414 15.4141L26.586 12.5861Z" fill="white"/>
         </svg>
@@ -50,7 +50,7 @@ export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
             right:'max(calc(50% - 600px - 30px), 0px)',
             top:'50%',
             transform:'translateY(-50%)'
-        }} className="absolute" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        }} className="cursor-pointer absolute" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="48" height="48" rx="24" fill="black" fillOpacity="0.5"/>
             <path d="M21.4139 35.4139L32.8279 23.9999L21.4139 12.5859L18.5859 15.4139L27.1719 23.9999L18.5859 32.5859L21.4139 35.4139Z" fill="white"/>
         </svg>

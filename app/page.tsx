@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { FC } from 'react'
-import { Banner, BannerList } from './banner/banner'
+import { Banner, BannerList } from './banner';
+import { ContainerMin, ContainerMain } from './body';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,33 +34,30 @@ const Curri:FC<iCurri> = ({title, src}) => {
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-between">
+    <ContainerMain>
       <BannerList>
         <Banner backgroundColor='#3A61EC' src="/banner_image/camp.svg" />
         <Banner backgroundColor='#EC613A' src="/banner_image/camp.svg" />
       </BannerList>
-      <div className='flex justify-start container gap-8 pt-10'>
+      <ContainerMin className='gap-8 pt-10' isRow={true}>
         <ImageButton href='https://map.naver.com/v5/entry/place/1353598676?c=13,0,0,0,dh&placePath=%2Fhome%3Fentry=plt' title='상담 예약' src="/image/sandam.svg" />
         <ImageButton href='https://map.naver.com/v5/entry/place/1353598676?c=13,0,0,0,dh&placePath=%2Fhome%3Fentry=plt' title='위치 보기' src="/image/position.svg" />
         <ImageButton href='https://blog.naver.com/incodingplus' title='블로그 보기' src="/image/blog.svg" />
-      </div>
-      <div className='flex justify-start container flex-col'>
+      </ContainerMin>
+      <ContainerMin>
         <h2 className='text-xl font-black mt-14'>커리큘럼 소개</h2>
-        <div className='flex flex-wrap justify-between'>
+        <div className='flex flex-wrap justify-between mb:'>
           <Curri title="입시반(프로그래밍)" src="/curri/coding1.avif" />
           <Curri title="입시반(프로그래밍)" src="/curri/coding2.avif" />
           <Curri title="입시반(프로그래밍)" src="/curri/coding3.avif" />
         </div>
-      </div>
-      <div className='flex justify-start container flex-col'>
+      </ContainerMin>
+      <ContainerMin>
         <h2 className='text-xl font-black mt-14'>인코딩 플러스 소식</h2>
         <div className='flex'>
 
         </div>
-      </div>
-      <div className='flex ju'>
-
-      </div>
-    </main>
+      </ContainerMin>
+    </ContainerMain>
   )
 }

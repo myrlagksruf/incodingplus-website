@@ -33,6 +33,9 @@ dependencies:
     version: 5.0.4
 
 devDependencies:
+  '@types/navermaps':
+    specifier: ^3.6.4
+    version: 3.6.4
   sass:
     specifier: ^1.62.0
     version: 1.62.0
@@ -184,6 +187,16 @@ packages:
     dependencies:
       tslib: 2.5.0
     dev: false
+
+  /@types/geojson@7946.0.10:
+    resolution: {integrity: sha512-Nmh0K3iWQJzniTuPRcJn5hxXkfB1T1pgB89SBig5PlJQU5yocazeu4jATJlaA0GYFKWMqDdvYemoSnF2pXgLVA==}
+    dev: true
+
+  /@types/navermaps@3.6.4:
+    resolution: {integrity: sha512-fnRipyjd/kRyyRGK9MjLjTRkWUtz7tuBfvBVV+59tjXHt9ULOHbqEKaZm84T3dfQiKhNM+1rmvv5M6LnvEVj1w==}
+    dependencies:
+      '@types/geojson': 7946.0.10
+    dev: true
 
   /@types/node@18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
