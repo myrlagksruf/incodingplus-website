@@ -36,7 +36,7 @@ export default async function RootLayout({
             throw '잘못된 접근';
         }
     } catch (err) {
-        redirect('/');
+        redirect('/login/signin');
     }
     return <>
         {children}

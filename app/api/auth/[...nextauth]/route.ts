@@ -10,8 +10,14 @@ export const authOptions:AuthOptions = {
             clientSecret:process.env.CLIENT_PW ?? '',
         })
     ],
-    
+    pages:{
+      signIn:'/login/signin',
+      error:'/login/error'  
+    },
     callbacks:{
+        async redirect({baseUrl, url}){
+            return `${baseUrl}/admin`
+        },
         async jwt({account, token, user, profile, session, trigger}){
             if(account){
                 token.accessToken = account.access_token;

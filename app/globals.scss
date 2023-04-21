@@ -24,7 +24,9 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
+body{
+  min-height: calc(var(--vh, 1vh) * 100);
+}
 /* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

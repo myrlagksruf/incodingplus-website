@@ -43,10 +43,11 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tigdx8m9ob"></script>
+        <script src="/js/resize.js"></script>
       </head>
-      <body>
+      <body className='flex flex-col'>
         <Header />
-        {children}
+        <div className='flex flex-col flex-grow'>{children}</div>
         <Footer />
       </body>
     </html>
