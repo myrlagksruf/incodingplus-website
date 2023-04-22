@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ContainerMain, ContainerMin } from "../body";
 import { MapElement } from "./Map";
 export default function Page(){

@@ -1,0 +1,1 @@
+export const svgToURL = (str:string) => `data:image/svg+xml;utf8,${encodeURIComponent(str)}`;

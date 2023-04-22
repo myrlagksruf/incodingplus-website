@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { FC } from 'react'
 import { Banner, BannerList } from './banner';
 import { ContainerMin, ContainerMain } from './body';
+import { svgToURL } from './module';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -46,7 +47,7 @@ export default function Home() {
       </ContainerMin>
       <ContainerMin>
         <h2 className='text-xl font-black mt-14'>커리큘럼 소개</h2>
-        <div className='flex flex-wrap justify-between mb:'>
+        <div className='flex flex-wrap justify-between'>
           <Curri title="입시반(프로그래밍)" src="/curri/coding1.avif" />
           <Curri title="입시반(프로그래밍)" src="/curri/coding2.avif" />
           <Curri title="입시반(프로그래밍)" src="/curri/coding3.avif" />
@@ -54,9 +55,7 @@ export default function Home() {
       </ContainerMin>
       <ContainerMin>
         <h2 className='text-xl font-black mt-14'>인코딩 플러스 소식</h2>
-        <div className='flex'>
-
-        </div>
+        <div className='flex'></div>
       </ContainerMin>
     </ContainerMain>
   )
