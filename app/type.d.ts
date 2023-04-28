@@ -5,4 +5,5 @@ export interface MyFile{
     size:number;
     data:string;
     path:string;
+    isNew?:boolean;
 }
