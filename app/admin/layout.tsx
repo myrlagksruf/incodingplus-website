@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { allow } from "../api/auth/[...nextauth]/route";
+import { getOrigin } from "../module";
 
 interface iUser{
     user:{
@@ -17,16 +18,14 @@ export default async function RootLayout({
   }: {
     children: React.ReactNode
   }) {
-    let header = headers();
-    let proto = header.get('x-forwarded-proto') ?? 'https'
-    let host = header.get('host') ?? '';
+    let origin = getOrigin();
     try {
-        console.log(`${proto}://${host}/api/auth/session`);
-        const res = await fetch(`${proto}://${host}/api/auth/session`, {
+        console.log(`${origin}/api/auth/session`);
+        const res = await fetch(`${origin}/api/auth/session`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Cookie': header.get('cookie') ?? ''
+                'Cookie': headers().get('cookie') ?? ''
             }
         });
         const json = (await res.json()) as iUser;

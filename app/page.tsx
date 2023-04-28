@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google'
 import { FC } from 'react'
 import { Banner, BannerList } from './banner';
 import { ContainerMin, ContainerMain } from './body';
-import { svgToURL } from './module';
 
 const inter = Inter({ subsets: ['latin'] })
 

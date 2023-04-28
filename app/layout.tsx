@@ -4,6 +4,7 @@ import logo from '@/public/logo.svg'
 import Image from 'next/image';
 import Link from 'next/link';
 import { Header } from './header/Header';
+import { Resize } from './layoutClient';
 
 export const metadata = {
   title: '인코딩 플러스 코딩 학원',
@@ -43,7 +44,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tigdx8m9ob"></script>
-        <script src="/js/resize.js"></script>
+        <Resize />
       </head>
       <body className='flex flex-col'>
         <Header />
