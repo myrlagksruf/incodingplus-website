@@ -29,11 +29,11 @@ export default function Page(){
             read.readAsDataURL(file);
             await new Promise(res => read.onload = res);
             return {
-                path:`${param.paths}/${file.name}`,
+                path:`${decodeURIComponent(param.paths)}/${file.name}`,
                 name:file.name,
                 type:file.type,
                 lastModified:file.lastModified,
-                size:(read.result as string).length,
+                size:file.size,
                 data:read.result as string
             } 
         }
@@ -158,7 +158,7 @@ export default function Page(){
         <div className="flex justify-between items-center" style={{
             gridColumnStart:'span 6'
         }}>
-            <div className="p-1">/{param.paths.split('/').slice(1).join('/')}</div>
+            <div className="p-1">/{decodeURIComponent(param.paths.split('/').slice(1).join('/'))}</div>
             <div>
                 <input ref={input} type="file" multiple style={{
                     display:'none'
@@ -170,7 +170,7 @@ export default function Page(){
                 <button onClick={() => {
                     let now = Date.now();
                     if(ref.current) ref.current.focus();
-                    else setArr([{path:`${param.paths}/${now}`, name:`${now}`, data:'',  lastModified:0, size:0, type:'folder', isNew:true},...arr])
+                    else setArr([{path:`${decodeURIComponent(param.paths)}/${now}`, name:`${now}`, data:'',  lastModified:0, size:0, type:'folder', isNew:true},...arr])
                 }} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">새 폴더</button>
                 <button onClick={refresh} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">새로고침</button>
             </div>
@@ -194,7 +194,7 @@ export default function Page(){
                 <Link onClick={(e) => v.isNew && e.preventDefault()} href={v.type === 'folder' ? `/admin/${v.path}` : `/mongodb/public/list/${v.path}`} key={i * 6 + 1} className="p-1">
                     {v.isNew ? <input type="text" ref={ref}
                         value={v.name}
-                        onChange={(e) => setArr([...arr.slice(0, i), {...v, path:`${param.paths}/${e.currentTarget.value}`, name:e.currentTarget.value}, ...arr.slice(i + 1)])}
+                        onChange={(e) => setArr([...arr.slice(0, i), {...v, path:`${decodeURIComponent(param.paths)}/${e.currentTarget.value}`, name:e.currentTarget.value}, ...arr.slice(i + 1)])}
                         onKeyDown={(e) => {
                             if(e.code === 'Enter'){
                                 if(arr.find(t => t.path === v.path.trim() && !t.isNew)){
@@ -205,6 +205,9 @@ export default function Page(){
                                     return;
                                 } else if(v.name !== v.name.trim()){
                                     alert('이름의 앞 또는 끝이 비어있으면 안됩니다.');
+                                    return;
+                                } else if(/^[.]{1,2}$/.test(v.name.trim())) {
+                                    alert('이름이 . 또는 ..이 되어서는 안됩니다.');
                                     return;
                                 }
                                 delete v.isNew;
@@ -217,7 +220,7 @@ export default function Page(){
                 <Link onClick={(e) => v.isNew && e.preventDefault()} href={v.type === 'folder' ? `/admin/${v.path}` : `/mongodb/public/list/${v.path}`} key={i * 6 + 3} className="p-1">{v.type}</Link>,
                 <Link onClick={(e) => v.isNew && e.preventDefault()} href={v.type === 'folder' ? `/admin/${v.path}` : `/mongodb/public/list/${v.path}`} key={i * 6 + 4} className="p-1">{v.size ? `${(2 ** (log % 10)).toPrecision(4)}${SIZE[Math.floor(log / 10)]}` : ''}</Link>,
                 <div key={i * 6 + 5} className="p-1">
-                    {v.isNew ||
+                    {(v.isNew || v.isPersistent) ||
                     <div>
                         <button onClick={() => confirm('정말로 지우시겠습니까?') && setDel(v)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">삭제</button>
                     </div>}

@@ -4,6 +4,7 @@ import { FC, createContext, useContext, useEffect, useMemo, useRef, useState } f
 import logo from '@/public/logo.svg';
 import Link from 'next/link';
 import './Header.scss';
+import { MyFile } from '../type';
 
 const Pos = createContext<number[]>([]);
 
@@ -54,7 +55,7 @@ const SubMenuContainer:FC<iSubMenuContainer> = ({menus, flag}) => {
     </div>)
 }
 
-export const Header = () => {
+export const Header:FC<{files:string[][]}> = ({files}) => {
     let elm = useRef<HTMLDivElement>(null);
     let [flag, setFlag] = useState(false);
     let [widths, setWidths] = useState<number[]>([]);
@@ -95,29 +96,13 @@ export const Header = () => {
                     </Link>
                     <MenuContainer menus={[
                     {name:'학원 소개', href:'/introduce'},
-                    {name:'커리큘럼', href:'/curriculum/ipsi'},
-                    {name:'학원 소식', href:'/'},
-                    {name:'수강생 후기', href:'/'},
+                    ...files.map(v => ({name:v[0], href:`/curriculum/${v[1]}`}))
                     ]} />
                 </div>
             </div>
             <SubMenuContainer flag={flag} menus={[
                 [],
-                [
-                    {name:'입시반', href:'/curriculum/ipsi'},
-                    {name:'코딩 기초', href:'/curriculum/coding_basic'},
-                    {name:'국어 논술', href:'/curriculum/guknon'},
-                    {name:'원데이 클래스', href:'/curriculum/one_day_class'},
-                ],
-                [
-                    {name:'학원 일정', href:'/'},
-                    {name:'수업 시간표', href:'/'},
-                    {name:'FAQ', href:'/'},
-                ],
-                [
-                    {name:'포트폴리오', href:'/'},
-                    {name:'합격생 후기', href:'/'},
-                ]
+                ...files.map(v => v.slice(1).map(t => ({name:t.split('.').at(-1) ?? '', href:`/curriculum/${t}`})))
             ]} />
         </Pos.Provider>
     </header>

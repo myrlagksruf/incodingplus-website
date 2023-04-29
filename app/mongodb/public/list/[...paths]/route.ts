@@ -6,7 +6,7 @@ export async function GET(req:NextRequest, { params }:{params:{paths:string[]}})
     if(Array.isArray(arr)){
         return new NextResponse(JSON.stringify(arr));
     }
-    return new NextResponse(Buffer.from(arr.data.split(',')[1], 'base64'), {
+    return new NextResponse(arr.data.buffer, {
         headers:{
             'Content-Type':arr.type
         }
