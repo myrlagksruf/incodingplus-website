@@ -8,7 +8,6 @@ export async function updateFiles(files:MyFile[]){
     }).project({
         path:1, type:1
     }).toArray();
-    console.log(arr)
     const docu = await collection.bulkWrite(files.filter(v => {
         let x = arr.find(t => t.path === v.path);;
         return !x || x.type !== 'folder';
@@ -23,7 +22,6 @@ export async function updateFiles(files:MyFile[]){
             }
         }
     }))
-    // await client.close();
     if(!docu) return null;
     return docu;
 }
