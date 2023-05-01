@@ -3,7 +3,9 @@ import { getFileOrFolder } from "./db";
 
 export async function GET(req:NextRequest, { params }:{params:{paths:string[]}}){
     try{
-        let arr = await getFileOrFolder(params.paths);
+        let d = Number(req.nextUrl.searchParams.get('d'));
+        let num = isNaN(d) ? 0 : Math.max(Math.floor(d), 0);
+        let arr = await getFileOrFolder(params.paths.map(decodeURIComponent), num);
         if(Array.isArray(arr)){
             return new NextResponse(JSON.stringify(arr));
         }

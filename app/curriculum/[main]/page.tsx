@@ -3,7 +3,7 @@ import { MyFile } from "@/app/type";
 
 export default async function Page({params}:{params:{main:string}}){
     let main = decodeURIComponent(params.main);
-    let list = (await getFileOrFolder(['root', 'curriculum', main])) as MyFile[];
+    let list = (await getFileOrFolder(['root', 'curriculum', main], 0)) as MyFile[];
     let desktop = list.find(v => v.name.includes('desktop'))?.path ?? 'root/logo.svg';
     let mobile = list.find(v => v.name.includes('mobile'))?.path ?? 'root/logo.svg';
     return <>

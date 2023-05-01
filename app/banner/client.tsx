@@ -5,10 +5,7 @@ import React from "react";
 
 export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
     let elm = useRef<HTMLDivElement>(null);
-    let [ inner, setInner ] = useState({
-        width:0,
-        height:0
-    });
+    let [ inner, setInner ] = useState({ width:0, height:0 });
     let [index, setIndex] = useState(0);
     let [flag, setFlag] = useState(false);
     useLayoutEffect(() => {
@@ -26,13 +23,11 @@ export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
         if(elm.current){
             re.observe(elm.current);
         }
-        return () => {
-            re.disconnect();
-        }
+        return () => re.disconnect();
     }, []);
     return (<div ref={elm} className="h-96 mb-10 w-full relative overflow-y-hidden overflow-x-hidden whitespace-nowrap">
         {flag && <div className="flex w-full" style={{
-            width:`${inner.width * 2}px`,
+            width:`${inner.width * children.length}px`,
             transform:`translateX(calc(-100% / ${children.length} * ${index}))`,
             transition:'transform 0.5s'
         }}>
@@ -54,19 +49,5 @@ export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
             <rect width="48" height="48" rx="24" fill="black" fillOpacity="0.5"/>
             <path d="M21.4139 35.4139L32.8279 23.9999L21.4139 12.5859L18.5859 15.4139L27.1719 23.9999L18.5859 32.5859L21.4139 35.4139Z" fill="white"/>
         </svg>
-    </div>)
-}
-interface iBanner{
-    backgroundColor:string;
-    src:string;
-}
-
-export const Banner:FC<iBanner> = ({backgroundColor, src}) => {
-    return (<div className="h-96 flex-grow" style={{
-        backgroundColor,
-    }}>
-        <div className="h-full bg-contain bg-no-repeat bg-center container m-auto overflow-hidden" style={{
-            backgroundImage:`url("${src}")`,
-        }}></div>
     </div>)
 }

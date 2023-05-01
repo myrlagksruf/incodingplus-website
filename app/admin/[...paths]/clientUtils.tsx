@@ -35,11 +35,11 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
         }
     }, [upload]);
     return <div className="contents">
-        <Link href={file.type === 'folder' ? `/admin/${file.path}` : `/mongodb/public/list/${file.path}`} className="p-1"></Link>
-        <Link href={file.type === 'folder' ? `/admin/${file.path}` : `/mongodb/public/list/${file.path}`} className="p-1">{file.name}</Link>
-        <Link href={file.type === 'folder' ? `/admin/${file.path}` : `/mongodb/public/list/${file.path}`} className="p-1">{file.lastModified ? file.lastModified : ''}</Link>
-        <Link href={file.type === 'folder' ? `/admin/${file.path}` : `/mongodb/public/list/${file.path}`} className="p-1">{file.type}</Link>
-        <Link href={file.type === 'folder' ? `/admin/${file.path}` : `/mongodb/public/list/${file.path}`} className="p-1">{file.size ? `${(2 ** (log % 10)).toPrecision(4)}${SIZE[Math.floor(log / 10)]}` : ''}</Link>
+        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1"></Link>
+        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1">{file.name}</Link>
+        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1">{file.lastModified ? file.lastModified : ''}</Link>
+        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1">{file.type}</Link>
+        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1">{file.size ? `${(2 ** (log % 10)).toPrecision(4)}${SIZE[Math.floor(log / 10)]}` : ''}</Link>
         <div className="p-1">
             {
                 !file.isPersistent && 
@@ -66,6 +66,7 @@ const Modal:FC<{title:string; types?:[string, string][];onSuccess:(data:string[]
             <h1 className="text-center text-2xl">{title}</h1>
             {!!types && types.map((v, i) => [
                 <label
+                    key={i * 2}
                     className="block text-gray-700 text-sm font-bold mb-2"
                     htmlFor={`input-modal-${i}`}
                 >
@@ -73,7 +74,7 @@ const Modal:FC<{title:string; types?:[string, string][];onSuccess:(data:string[]
                 </label>,
                 <input
                     id={`input-modal-${i}`}
-                    key={i}
+                    key={i * 2 + 1}
                     type={v[1]}
                     value={inputs[i]}
                     className="shadow appearance-none border rounded w-full py-2 mb-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -109,12 +110,13 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
             read.readAsDataURL(file);
             await new Promise(res => read.onload = res);
             return {
-                path:`${params.paths.join('/')}/${file.name}`,
+                path:decodeURIComponent(`${params.paths.join('/')}/${file.name}`),
                 name:file.name,
                 type:file.type,
                 lastModified:file.lastModified,
                 size:(read.result as string).length,
-                data:read.result as string
+                data:read.result as string,
+                pathCount:params.paths.length + 1
             } 
         }
         const filePick = async () => {
@@ -164,7 +166,7 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
     return <div className="flex justify-between items-center" style={{
         gridColumnStart:'span 6'
     }}>
-        <div className="p-1">/{params.paths.slice(1).join('/')}</div>
+        <div className="p-1">/{decodeURIComponent(params.paths.slice(1).join('/'))}</div>
         <div>
             <input ref={input} type="file" multiple style={{
                 display:'none'
@@ -191,12 +193,13 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
                             }
                             setUpload({
                                 files:[{
-                                    path:`${params.paths.join('/')}/${data[0]}`,
+                                    path:decodeURIComponent(`${params.paths.join('/')}/${data[0]}`),
                                     name:data[0],
                                     type:'folder',
                                     lastModified:0,
                                     size:0,
-                                    data:''
+                                    data:'',
+                                    pathCount:params.paths.length + 1
                                 }], command:'PUT'
                             });
                             setIsModal(false);

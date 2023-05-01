@@ -43,7 +43,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  let files = (await getFileOrFolder(['root', 'curriculum'])) as MyFile[];
+  let files = (await getFileOrFolder(['root', 'curriculum'], 0)) as MyFile[];
   let mains = files
     .map(v => [v.name.split('.')[1], v.name])
     .reduce((a, v) => {

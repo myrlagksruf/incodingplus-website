@@ -20,7 +20,7 @@ export async function updateFiles(files:MyFile[]){
                     path:v.path
                 },
                 upsert:true,
-                replacement:{...v, data: isB ? Binary.createFromBase64(v.data.split(',')[1]) : v.data}
+                replacement:{ ...v, data: isB ? Binary.createFromBase64(v.data.split(',')[1]) : v.data }
             }
         }
     }))
@@ -39,6 +39,7 @@ export async function insertFolder(path:string){
         type:'folder',
         size:0,
         lastModified:0,
+        pathCount:path.split('/').length,
         data:Buffer.from(''),
     });
     if(!docu) return null;

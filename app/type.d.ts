@@ -6,6 +6,7 @@ interface MyFileOrigin{
     lastModified:number;
     size:number;
     path:string;
+    pathCount:number;
     isPersistent?:boolean;
 }
 

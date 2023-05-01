@@ -1,6 +1,8 @@
 import { FC } from 'react'
-import { Banner, BannerList } from './banner';
+import { BannerList } from './banner/client';
+import { Banner } from './banner/server';
 import { ContainerMin, ContainerMain } from './body';
+import { getFileOrFolder } from './mongodb/public/list/[...paths]/db';
 
 
 interface iImageButton{
@@ -30,11 +32,37 @@ const Curri:FC<iCurri> = ({title, src}) => {
 }
 
 export default async function Home() {
+  const res = await getFileOrFolder(['root', 'banner'], 1);
+  let banners:string[][] = [];
+  if(res === null || !Array.isArray(res)) banners = [['default', 'rgb(75, 130, 195)', '/logo.svg']];
+  else {
+    const result = res
+      .filter(v => /^root\/banner/.test(v.path) && v.type !== 'folder')
+      .sort((a, b) => a.path.localeCompare(b.path))
+      .reduce((a, v) => {
+        let [title, img] = v.path.split('/').slice(2);
+        let find = a.find(t => t[0] === title);
+        if(!find) {
+          find = [title];
+          a.push(find);
+        }
+        let check = img.split('.')[0];
+        let back = img.split('.')[1];
+        if(check === 'desktop'){
+          find[1] = back;
+          find[2] = `/mongodb/public/list/${v.path.split('/').map(encodeURIComponent).join('/')}`;
+        } else if(check === 'mobile'){
+          find[3] = back;
+          find[4] = `/mongodb/public/list/${v.path.split('/').map(encodeURIComponent).join('/')}`;
+        }
+        return a;
+      }, [] as string[][])
+      banners = result;
+  }
   return (
     <ContainerMain>
       <BannerList>
-        <Banner backgroundColor='#3A61EC' src="/banner_image/camp.svg" />
-        <Banner backgroundColor='#EC613A' src="/banner_image/camp.svg" />
+        {banners.map((v, i) => <Banner key={i} backgroundColor={v[1]} src={v[2]} />)}
       </BannerList>
       <ContainerMin className='gap-8 pt-10' isRow={true}>
         <ImageButton href='https://map.naver.com/v5/entry/place/1353598676?c=13,0,0,0,dh&placePath=%2Fhome%3Fentry=plt' title='상담 예약' src="/image/sandam.svg" />

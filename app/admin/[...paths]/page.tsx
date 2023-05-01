@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FileView, PanelView } from "./clientUtils";
 import { notFound, redirect } from "next/navigation";
 export default async function Page({params}:{params:{paths:string[]}}){
-    let files = (await getFileOrFolder(params.paths));
+    let files = (await getFileOrFolder(params.paths.map(decodeURIComponent), 0));
     if(!Array.isArray(files)){
         // 없는 경로인 경우
         if(files === null) notFound();
@@ -22,12 +22,12 @@ export default async function Page({params}:{params:{paths:string[]}}){
         <div className="p-1 bg-gray-100">형식</div>
         <div className="p-1 bg-gray-100">크기</div>
         <div className="p-1 bg-gray-100">컨트롤</div>
-        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).join('/')}`}></Link>
-        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).join('/')}`}>..</Link>
-        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).join('/')}`}></Link>
-        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).join('/')}`}></Link>
-        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).join('/')}`}></Link>
-        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).join('/')}`}></Link>
+        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).map(encodeURIComponent).join('/')}`}></Link>
+        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).map(encodeURIComponent).join('/')}`}>..</Link>
+        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).map(encodeURIComponent).join('/')}`}></Link>
+        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).map(encodeURIComponent).join('/')}`}></Link>
+        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).map(encodeURIComponent).join('/')}`}></Link>
+        <Link className="p-1" href={`/admin/${params.paths.slice(0, -1).map(encodeURIComponent).join('/')}`}></Link>
         {(files as MyFile[]).map((v, i) => (<FileView file={v} key={i} />))}
     </div>)
 }
