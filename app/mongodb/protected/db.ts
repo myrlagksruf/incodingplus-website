@@ -14,7 +14,6 @@ export async function updateFiles(files:MyFile[]){
         return !x || x.type !== 'folder';
     }).map(v => {
         let isB = v.data.includes('base64');
-        console.log(Buffer.from(v.data.split(',')[1], 'base64'));
         return {
             replaceOne:{
                 filter:{

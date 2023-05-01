@@ -7,6 +7,7 @@ export async function GET(req:NextRequest, { params }:{params:{paths:string[]}})
         if(Array.isArray(arr)){
             return new NextResponse(JSON.stringify(arr));
         }
+        if(arr === null) throw '해당 폴더 또는 파일은 존재하지 않습니다.';
         return new NextResponse(arr.data.buffer, {
             headers:{
                 'Content-Type':arr.type

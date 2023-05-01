@@ -20,7 +20,6 @@ export default async function RootLayout({
   }) {
     let origin = getOrigin();
     try {
-        console.log(`${origin}/api/auth/session`);
         const res = await fetch(`${origin}/api/auth/session`, {
             method: 'GET',
             headers: {
@@ -38,6 +37,9 @@ export default async function RootLayout({
         redirect('/login/signin');
     }
     return <>
+        <div id="modal-container" className="absolute left-0 top-0" style={{
+            zIndex:9999
+        }}></div>
         {children}
     </>
 }
