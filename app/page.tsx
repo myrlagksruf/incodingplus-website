@@ -1,10 +1,7 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import { FC } from 'react'
 import { Banner, BannerList } from './banner';
 import { ContainerMin, ContainerMain } from './body';
 
-const inter = Inter({ subsets: ['latin'] })
 
 interface iImageButton{
   title:string;
@@ -32,7 +29,7 @@ const Curri:FC<iCurri> = ({title, src}) => {
   </div>)
 }
 
-export default function Home() {
+export default async function Home() {
   return (
     <ContainerMain>
       <BannerList>

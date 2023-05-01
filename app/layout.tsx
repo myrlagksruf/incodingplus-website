@@ -5,6 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Header } from './header/Header';
 import { Resize } from './layoutClient';
+import { getOrigin } from './module';
+import { getFileOrFolder } from './mongodb/public/list/[...paths]/db';
+import { MyFile } from './type';
 
 export const metadata = {
   title: '인코딩 플러스 코딩 학원',
@@ -35,11 +38,22 @@ const Footer = () => {
   </footer>)
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  let files = (await getFileOrFolder(['root', 'curriculum'])) as MyFile[];
+  let mains = files
+    .map(v => [v.name.split('.')[1], v.name])
+    .reduce((a, v) => {
+        let find = a.find(t => t[0] === v[0]);
+        if(find){
+            find.push(v[1]);
+            return a;
+        }
+        return [...a, v];
+    }, [] as string[][]);
   return (
     <html lang="en">
       <head>
@@ -47,7 +61,7 @@ export default function RootLayout({
         <Resize />
       </head>
       <body className='flex flex-col'>
-        <Header />
+        <Header files={mains} />
         <div className='flex flex-col flex-grow'>{children}</div>
         <Footer />
       </body>
