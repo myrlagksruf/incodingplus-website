@@ -5,10 +5,14 @@ import React from "react";
 
 export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
     let elm = useRef<HTMLDivElement>(null);
+    let setT = useRef<NodeJS.Timer>();
     let [ inner, setInner ] = useState({ width:0, height:0 });
     let [index, setIndex] = useState(0);
     let [flag, setFlag] = useState(false);
     useLayoutEffect(() => {
+        setT.current = setInterval(() => {
+            setIndex(v => (v + 1) % children.length);
+        }, 5000);
         let re = new ResizeObserver(ents => {
             for(let ent of ents){
                 if(ent.target !== elm.current) continue;
@@ -23,7 +27,10 @@ export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
         if(elm.current){
             re.observe(elm.current);
         }
-        return () => re.disconnect();
+        return () => {
+            re.disconnect();
+            clearInterval(setT.current);
+        }
     }, []);
     return (<div ref={elm} className="h-96 mb-10 w-full relative overflow-y-hidden overflow-x-hidden whitespace-nowrap">
         {flag && <div className="flex w-full" style={{
@@ -33,7 +40,13 @@ export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
         }}>
             {children}
         </div>}
-        <svg onClick={() => setIndex((index - 1 + children.length) % children.length)} style={{
+        <svg onClick={() => {
+                setIndex((index - 1 + children.length) % children.length);
+                clearInterval(setT.current);
+                setT.current = setInterval(() => {
+                    setIndex(v =>  (v - 1 + children.length) % children.length);
+                }, 5000);
+            }} style={{
             left:'max(calc(50% - 600px - 30px), 0px)',
             top:'50%',
             transform:'translateY(-50%)'
@@ -41,7 +54,13 @@ export const BannerList:FC<{children:React.ReactNode[]}> = ({children}) => {
             <rect x="48" y="48" width="48" height="48" rx="24" transform="rotate(-180 48 48)" fill="black" fillOpacity="0.5"/>
             <path d="M26.586 12.5861L15.172 24.0001L26.586 35.4141L29.414 32.5861L20.828 24.0001L29.414 15.4141L26.586 12.5861Z" fill="white"/>
         </svg>
-        <svg onClick={() => setIndex((index + 1) % children.length)} style={{
+        <svg onClick={() => {
+                setIndex((index + 1) % children.length);
+                clearInterval(setT.current);
+                setT.current = setInterval(() => {
+                    setIndex(v => (v + 1) % children.length);
+                }, 5000);
+            }} style={{
             right:'max(calc(50% - 600px - 30px), 0px)',
             top:'50%',
             transform:'translateY(-50%)'

@@ -3,6 +3,8 @@ import { BannerList } from './banner/client';
 import { Banner } from './banner/server';
 import { ContainerMin, ContainerMain } from './body';
 import { getFileOrFolder } from './mongodb/public/list/[...paths]/db';
+import { MyFile } from './type';
+import { SosicList } from './sosic/client';
 
 
 interface iImageButton{
@@ -33,6 +35,7 @@ const Curri:FC<iCurri> = ({title, src}) => {
 
 export default async function Home() {
   const res = await getFileOrFolder(['root', 'banner'], 1);
+  const sosicStringList = ((await getFileOrFolder(['root', 'sosic'], 0)) as MyFile[]).filter(v => v.type === 'folder');
   let banners:string[][] = [];
   if(res === null || !Array.isArray(res)) banners = [['default', 'rgb(75, 130, 195)', '/logo.svg']];
   else {
@@ -79,7 +82,7 @@ export default async function Home() {
       </ContainerMin>
       <ContainerMin>
         <h2 className='text-xl font-black mt-14'>인코딩 플러스 소식</h2>
-        <div className='flex'></div>
+        <SosicList list={sosicStringList.map(v => v.name)} />
       </ContainerMin>
     </ContainerMain>
   )
