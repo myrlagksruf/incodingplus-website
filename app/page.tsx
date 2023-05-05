@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { BannerList } from './banner/client';
-import { Banner } from './banner/server';
 import { ContainerMin, ContainerMain } from './body';
 import { getFileOrFolder } from './mongodb/public/list/[...paths]/db';
 import { MyFile } from './type';
@@ -64,9 +63,7 @@ export default async function Home() {
   }
   return (
     <ContainerMain>
-      <BannerList>
-        {banners.map((v, i) => <Banner key={i} backgroundColor={v[1]} src={v[2]} />)}
-      </BannerList>
+      <BannerList banners={banners} />
       <ContainerMin className='gap-8 pt-10' isRow={true}>
         <ImageButton href='https://map.naver.com/v5/entry/place/1353598676?c=13,0,0,0,dh&placePath=%2Fhome%3Fentry=plt' title='상담 예약' src="/image/sandam.svg" />
         <ImageButton href='https://map.naver.com/v5/entry/place/1353598676?c=13,0,0,0,dh&placePath=%2Fhome%3Fentry=plt' title='위치 보기' src="/image/position.svg" />
