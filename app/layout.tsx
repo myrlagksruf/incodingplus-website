@@ -1,11 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
 import './globals.scss'
-import logo from '@/public/logo.svg'
-import Image from 'next/image';
-import Link from 'next/link';
 import { Header } from './header/Header';
 import { Resize } from './layoutClient';
-import { getOrigin } from './module';
 import { getFileOrFolder } from './mongodb/public/list/[...paths]/db';
 import { MyFile } from './type';
 
