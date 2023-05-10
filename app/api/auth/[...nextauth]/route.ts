@@ -10,6 +10,7 @@ export const authOptions:AuthOptions = {
             clientSecret:process.env.CLIENT_PW ?? '',
         })
     ],
+    secret:process.env.SECRET,
     pages:{
       signIn:'/login/signin',
       error:'/login/error'  
