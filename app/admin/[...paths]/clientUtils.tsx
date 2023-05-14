@@ -95,7 +95,7 @@ interface iUpload{
     command:'PUT'|'POST'|'PATCH'|'';
 }
 
-const MAX_SIZE = 10000000;
+const MAX_SIZE = 10_000_000;
 export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params, names}) => {
     const input = useRef<HTMLInputElement>(null);
     const modalContainer = useRef<HTMLDivElement>();
