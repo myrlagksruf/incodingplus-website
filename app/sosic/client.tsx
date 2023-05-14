@@ -28,7 +28,8 @@ export const SosicList:FC<{list:string[]}> = ({list}) => {
     return (<div className="grid gap-3" style={{
         gridTemplateColumns:"1fr 2fr"
     }}>
-        <div className="pt-8 mt-8 border-t-2 border-gray-300 markdown-body">
+        <div className="pt-8 mt-8 markdown-body">
+            <h2 className='text-xl font-black'>인코딩 플러스 소식</h2>
             {list.map((v, i) => {
                 let mat = v.match(/(?<=\d)\./);
                 let result = v;
@@ -41,7 +42,10 @@ export const SosicList:FC<{list:string[]}> = ({list}) => {
                         if(body.current)
                             setMarkdown(`<div style="height:calc(${getComputedStyle(body.current).height} - 2rem)"></div>`);
                     }}
-                    className={`${index === i ? 'text-blue-400' : 'text-gray-300'} text-xl hover:text-red-300 cursor-pointer`}
+                    style={{
+                        fontFamily: 'NanumSquare'
+                    }}
+                    className={`${index === i ? 'text-blue-500 text-xl' : 'text-gray-300 text-lg'}  hover:text-red-300 cursor-pointer mb-3 font-extrabold`}
                     key={i}>
                         {result}
                     </div>

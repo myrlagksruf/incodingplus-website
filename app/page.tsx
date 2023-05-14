@@ -82,8 +82,7 @@ export default async function Home() {
           <Curri title="입시반(프로그래밍)" src="/curri/coding3.avif" />
         </div>
       </ContainerMin>
-      <ContainerMin className='mb-5'>
-        <h2 className='text-xl font-black mt-14'>인코딩 플러스 소식</h2>
+      <ContainerMin className='my-16'>
         <SosicList list={sosicStringList.map(v => v.name)} />
       </ContainerMin>
     </ContainerMain>

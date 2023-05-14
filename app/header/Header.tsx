@@ -32,7 +32,7 @@ const MenuContainer:FC<iMenuContainer> = ({menus}) => {
             maxWidth:'600px',
             gridTemplateColumns: `repeat(${menus.length}, max-content)`
         }}>
-        {menus.map((v, i) => (<div className='w-fit menu relative main-menu' key={i}><Link href={v.href}>{v.name}</Link></div>))}
+        {menus.map((v, i) => (<div className='w-fit menu relative main-menu font-bold text-gray-900' key={i}><Link href={v.href}>{v.name}</Link></div>))}
   </div>
 }
 
@@ -47,7 +47,7 @@ const SubMenuContainer:FC<iSubMenuContainer> = ({menus, flag}) => {
         height:`${GAP * len + SUBPADDING}px`,
         transition:`calc(0.1s * ${len})`,
         transform:`${flag ? `translateY(${HEIGHT}px)` : 'translateY(-100%)'}`,
-        backgroundColor:'#FFFFFFaa'
+        backgroundColor:'#FFFFFFE0'
     }}>
         {menus.map((v, i) => v.map((k, j) => (<div className='absolute menu top-0 w-max' style={{
             transform:`translate(${widths[i]}px, ${GAP * j + SUBPADDING}px)`
