@@ -1,5 +1,5 @@
 import { handler } from "@/app/mongodb/setting";
-import { MyFile, MyFileBuffer } from "@/app/type";
+import { MyFile } from "@/app/type";
 import { WithId } from "mongodb";
 
 
@@ -20,5 +20,5 @@ export async function getFileOrFolder(strs:string[], num:number){
         if(!docu || docu.length === 0) return [];
         return docu;
     }
-    return info as WithId<MyFileBuffer>
+    return info as WithId<MyFile>
 }

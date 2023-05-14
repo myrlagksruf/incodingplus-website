@@ -1,5 +1,3 @@
-import type { Binary } from "mongodb";
-
 interface MyFileOrigin{
     name:string,
     type:string,
@@ -12,8 +10,4 @@ interface MyFileOrigin{
 
 export interface MyFile extends MyFileOrigin{
     data:string;
-}
-
-export interface MyFileBuffer extends MyFileOrigin{
-    data:Binary;
 }

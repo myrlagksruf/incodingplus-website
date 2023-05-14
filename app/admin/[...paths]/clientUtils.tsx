@@ -37,11 +37,10 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
     }, [upload]);
 
     const folderUrl = `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}`
-    const fileUrl = `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`
-    const imgUrl = getS3PublicUrl({
+    const fileUrl = getS3PublicUrl({
         path: file.path.split('/').map(encodeURIComponent).join('/')
     })
-    const href = file.type === 'folder' ? folderUrl : file.type.startsWith('image/') ? imgUrl : fileUrl
+    const href = file.type === 'folder' ? folderUrl : fileUrl
 
     return <div className="contents">
         <Link href={href} className="p-1"></Link>

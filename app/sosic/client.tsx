@@ -18,7 +18,8 @@ export const SosicList:FC<{list:string[]}> = ({list}) => {
     }, []);
     useLayoutEffect(() => {
         const getMarkdown = async () => {
-            const res = await fetch(`/mongodb/public/list/root/sosic/${encodeURIComponent(list[index])}/index.md`);
+            const url = getS3PublicUrl({ path: `root/sosic/${encodeURIComponent(list[index])}/index.md` })
+            const res = await fetch(url);
             const text = await res.text();
             setMarkdown(text);
         }
@@ -54,10 +55,10 @@ export const SosicList:FC<{list:string[]}> = ({list}) => {
                 remarkPlugins={[remarkGfm]}
                 components={{
                     a({node, className, children, href, ...props}){
-                        const url = new URL(`/mongodb/public/list/root/sosic/${encodeURIComponent(list[index])}/index.md`, origin);
                         const hrefObj:{href?:string} = {};
                         if(href){
-                            const result = new URL(href, url.href);
+                            const origin = getS3PublicUrl({ path: `root/sosic/${encodeURIComponent(list[index])}/index.md` })
+                            const result = new URL(href, origin);
                             hrefObj.href = result.href;
                         }
                         return <a {...props} className={className} {...hrefObj}>{href}{children}</a>

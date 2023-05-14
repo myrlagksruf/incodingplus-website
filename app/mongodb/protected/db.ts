@@ -1,6 +1,5 @@
 import { MyFile } from "@/app/type";
 import { handler } from "../setting";
-import { Binary } from "mongodb";
 import { S3 } from '@aws-sdk/client-s3'
 import { getS3PublicUrl } from "@/app/utils";
 
@@ -12,8 +11,9 @@ const s3 = new S3({
     region: 'ap-northeast-2',
 })
 
-async function uploadeImageToS3(file: MyFile){
-    if(!file.type.startsWith('image/') || !file.data.includes('base64')){
+/** Base64 인코딩된 바이너리 파일을 s3에 업로드 */
+async function uploadBinaryFile(file: MyFile){
+    if(!file.data.includes('base64')){
         // file.data like 'data:image/png;base64,~~'
         return ''
     }
@@ -40,10 +40,10 @@ export async function updateFiles(files:MyFile[]){
         path:1, type:1
     }).toArray();
 
-    // 이미지 파일이면 S3에 업로드 및 data 값 public url 로 변경
+    // base64 인코딩된 파일은 모두 s3 로 업로드
     await Promise.all(files.map(async file => {
-        if(file.type.startsWith('image/') && file.data.includes('base64')){
-            file.data = await uploadeImageToS3(file)
+        if(file.data.includes('base64')){
+            file.data = await uploadBinaryFile(file)
         }
     }))
 
@@ -51,14 +51,13 @@ export async function updateFiles(files:MyFile[]){
         let existsDoc = existsDocuments.find(t => t.path === v.path);;
         return existsDoc == null || existsDoc.type !== 'folder';
     }).map(v => {
-        let isB = v.data.includes('base64');
         return {
             replaceOne:{
                 filter:{
                     path:v.path
                 },
                 upsert:true,
-                replacement:{ ...v, data: isB ? Binary.createFromBase64(v.data.split(',')[1]) : v.data }
+                replacement:{ ...v, data: v.data }
             }
         }
     }))
@@ -78,7 +77,7 @@ export async function insertFolder(path:string){
         size: 0,
         lastModified: 0,
         pathCount: path.split('/').length,
-        data: new Binary(Buffer.from('')),
+        data: '',
     });
     if(!docu) return null;
     return docu;
