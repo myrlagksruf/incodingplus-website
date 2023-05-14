@@ -3,6 +3,7 @@ import { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'
+import { getS3PublicUrl } from "../utils";
 
 const DEFAULT = 300;
 
@@ -62,10 +63,10 @@ export const SosicList:FC<{list:string[]}> = ({list}) => {
                         return <a {...props} className={className} {...hrefObj}>{href}{children}</a>
                     },
                     img({node, className, src, ...props}){
-                        const url = new URL(`/mongodb/public/list/root/sosic/${encodeURIComponent(list[index])}/index.md`, origin);
                         const srcObj:{src?:string} = {};
                         if(src){
-                            const result = new URL(src, url.href);
+                            const origin = getS3PublicUrl({ path: `root/sosic/${encodeURIComponent(list[index])}/index.md` })
+                            const result = new URL(src, origin);
                             srcObj.src = result.href;
                         }
                         return <img {...props} className={className} {...srcObj} />

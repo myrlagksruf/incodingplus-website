@@ -4,6 +4,7 @@ import { ContainerMin, ContainerMain } from './body';
 import { getFileOrFolder } from './mongodb/public/list/[...paths]/db';
 import { MyFile } from './type';
 import { SosicList } from './sosic/client';
+import { getS3PublicUrl } from './utils';
 
 
 interface iImageButton{
@@ -52,10 +53,14 @@ export default async function Home() {
         let back = img.split('.')[1];
         if(check === 'desktop'){
           find[1] = back;
-          find[2] = `/mongodb/public/list/${v.path.split('/').map(encodeURIComponent).join('/')}`;
+          find[2] = getS3PublicUrl({
+            path: v.path.split('/').map(encodeURIComponent).join('/')
+          })
         } else if(check === 'mobile'){
           find[3] = back;
-          find[4] = `/mongodb/public/list/${v.path.split('/').map(encodeURIComponent).join('/')}`;
+          find[4] = getS3PublicUrl({
+            path: v.path.split('/').map(encodeURIComponent).join('/')
+          })
         }
         return a;
       }, [] as string[][])

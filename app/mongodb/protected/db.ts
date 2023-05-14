@@ -2,6 +2,7 @@ import { MyFile } from "@/app/type";
 import { handler } from "../setting";
 import { Binary } from "mongodb";
 import { S3 } from '@aws-sdk/client-s3'
+import { getS3PublicUrl } from "@/app/utils";
 
 const s3 = new S3({
     credentials: {
@@ -28,8 +29,7 @@ async function uploadeImageToS3(file: MyFile){
         ACL: 'public-read'
     })
 
-    const publicUrl = `https://s3.ap-northeast-2.amazonaws.com/cdn.in-coding.com/${Key}`
-    return publicUrl
+    return getS3PublicUrl(file)
 }
 
 export async function updateFiles(files:MyFile[]){

@@ -54,7 +54,7 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tigdx8m9ob"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" />
         <link rel="icon" type="image/svg+xml" href="/ico/favicon.svg" />
         <link rel="icon" type="image/png" href="/ico/favicon.png" />
         <Resize />

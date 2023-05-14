@@ -4,6 +4,7 @@ import { FC, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
+import { getS3PublicUrl } from "@/app/utils";
 
 const uploadFunc = async (upload:iUpload, router:ReturnType<typeof useRouter>) => {
     try{
@@ -34,12 +35,20 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
             setUpload({files:[], command:''});
         }
     }, [upload]);
+
+    const folderUrl = `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}`
+    const fileUrl = `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`
+    const imgUrl = getS3PublicUrl({
+        path: file.path.split('/').map(encodeURIComponent).join('/')
+    })
+    const href = file.type === 'folder' ? folderUrl : file.type.startsWith('image/') ? imgUrl : fileUrl
+
     return <div className="contents">
-        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1"></Link>
-        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1">{file.name}</Link>
-        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1">{file.lastModified ? file.lastModified : ''}</Link>
-        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1">{file.type}</Link>
-        <Link href={file.type === 'folder' ? `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}` : `/mongodb/public/list/${file.path.split('/').map(encodeURIComponent).join('/')}`} className="p-1">{file.size ? `${(2 ** (log % 10)).toPrecision(4)}${SIZE[Math.floor(log / 10)]}` : ''}</Link>
+        <Link href={href} className="p-1"></Link>
+        <Link href={href} className="p-1">{file.name}</Link>
+        <Link href={href} className="p-1">{file.lastModified ? file.lastModified : ''}</Link>
+        <Link href={href} className="p-1">{file.type}</Link>
+        <Link href={href} className="p-1">{file.size ? `${(2 ** (log % 10)).toPrecision(4)}${SIZE[Math.floor(log / 10)]}` : ''}</Link>
         <div className="p-1">
             {
                 !file.isPersistent && 
