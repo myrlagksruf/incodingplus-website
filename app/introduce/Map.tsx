@@ -11,7 +11,7 @@ export const MapElement:FC = () => {
       const location = new naver.maps.LatLng(37.308145, 126.8320995);
       const mapOptions: naver.maps.MapOptions = {
         center: location,
-        zoom: 15,
+        zoom: 14,
       };
       const map = new naver.maps.Map(mapElement.current, mapOptions);
       let marker = new naver.maps.Marker({

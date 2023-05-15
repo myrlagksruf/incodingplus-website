@@ -11,8 +11,8 @@ export const metadata = {
 };
 
 const Footer = () => {
-  return (<footer>
-    <div className='box-border flex items-center justify-center h-16 bg-gray-200'>
+  return (<footer className='bg-gray-50 text-sm'>
+    <div className='box-border flex items-center justify-center h-16 '>
       <div className='flex gap-8 w-full p-4' style={{
         maxWidth:'1200px'
       }}>
@@ -21,7 +21,7 @@ const Footer = () => {
         <div>교습비 반환기준</div>
       </div>
     </div>
-    <div className='w-full m-auto text-gray-500 p-4 text-sm' style={{
+    <div className='w-full m-auto text-gray-500 p-4' style={{
       maxWidth:'1200px'
     }}>
       <div>대표: 김정준 | 개인정보관리책임자 : 김정준</div>
@@ -29,7 +29,7 @@ const Footer = () => {
       <div>소재지: 경기도 안산시 단원구 광덕동로 41, 로진프라자 3층 인코딩프러스</div>
       <div>전화번호: 010-2838-2391</div>
       <div>사업자번호: 847-81-00387</div>
-      <div>CopyRight: 블라블라</div>
+      <div>Copyright 2023. 인코딩플러스 Co. all rights reserved.</div>
     </div>
   </footer>)
 }
@@ -54,7 +54,7 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tigdx8m9ob"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" />
         <link rel="icon" type="image/svg+xml" href="/ico/favicon.svg" />
         <link rel="icon" type="image/png" href="/ico/favicon.png" />
         <Resize />
