@@ -57,6 +57,7 @@ export default async function RootLayout({
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" />
         <link rel="icon" type="image/svg+xml" href="/ico/favicon.svg" />
         <link rel="icon" type="image/png" href="/ico/favicon.png" />
+        <meta name="referrer" content="no-referrer-when-downgrade" />
         <Resize />
       </head>
       <body className='flex flex-col'>
