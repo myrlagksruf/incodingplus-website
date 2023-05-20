@@ -14,16 +14,20 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-}
-:root::-webkit-scrollbar {
-  width: 10px;
-}
-:root::-webkit-scrollbar-thumb {
-  background-color: #2f3542;
-  border-radius: 5px;
-}
-:root::-webkit-scrollbar-track {
-  background-color: transparent;
+
+  overflow: overlay;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #2f354e;
+    border-radius: 20px;
+  }
 }
 @media (prefers-color-scheme: dark) {
   :root {
