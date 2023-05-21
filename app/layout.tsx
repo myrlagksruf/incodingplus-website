@@ -59,8 +59,20 @@ export default async function RootLayout({
         <link rel="icon" type="image/png" href="/ico/favicon.png" />
         <meta name="referrer" content="no-referrer-when-downgrade" />
         <Resize />
+        <script src="/ga.js"></script>
       </head>
       <body className='flex flex-col'>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-KR7B4LP"
+            height="0"
+            width="0"
+            style={{
+              display:"none",
+              visibility:"hidden"
+          }}>
+          </iframe>
+        </noscript>
         <Header files={mains} />
         <div className='flex flex-col flex-grow'>{children}</div>
         <Footer />
