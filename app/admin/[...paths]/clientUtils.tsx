@@ -28,6 +28,7 @@ const SIZE = ['B', 'KB', 'MB', 'GB', 'TB'];
 export const FileView:FC<{file:MyFile}> = ({file}) => {
     const log = useMemo(() => file.size ? Math.log2(file.size) : 0, [file]);
     const router = useRouter();
+    const [download, setDownload] = useState(false);
     const [upload, setUpload] = useState<iUpload>({files:[], command:''});
     useEffect(() => {
         if(upload.command !== '') {
@@ -35,6 +36,20 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
             setUpload({files:[], command:''});
         }
     }, [upload]);
+    useEffect(() => {
+        if(!download) return;
+        setDownload(false);
+        const downloadFromURL = async () => {
+            const res = await fetch(fileUrl);
+            const blob = await res.blob();
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = file.name;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+        downloadFromURL()
+    }, [download]);
 
     const folderUrl = `/admin/${file.path.split('/').map(encodeURIComponent).join('/')}`
     const fileUrl = getS3PublicUrl({
@@ -49,6 +64,15 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
         <Link href={href} className="p-1">{file.type}</Link>
         <Link href={href} className="p-1">{file.size ? `${(2 ** (log % 10)).toPrecision(4)}${SIZE[Math.floor(log / 10)]}` : ''}</Link>
         <div className="p-1">
+            {
+                file.type !== 'folder' &&
+                <button
+                    className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => setDownload(true)}
+                >
+                    다운로드
+                </button>
+            }
             {
                 !file.isPersistent && 
                 <button
