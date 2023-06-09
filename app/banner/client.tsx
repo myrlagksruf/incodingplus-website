@@ -52,13 +52,6 @@ export const BannerList:FC<{banners:iBanner[]}> = ({banners}) => {
             clearInterval(setT.current);
         }
     }, []);
-    useEffect(() => {
-        switch(bannerState){
-            case 0:console.log('');break;
-            case 1:;break;
-            case -1:;break;
-        }
-    }, [bannerState]);
     return (<div ref={elm} className="h-96 mb-10 w-full relative overflow-y-hidden overflow-x-hidden whitespace-nowrap">
         {flag && <div className="flex w-full h-full">
             {arr.map((v, i) => <div onTransitionEnd={refreshIndex} key={i} className="absolute h-full flex-grow w-full" style={{
