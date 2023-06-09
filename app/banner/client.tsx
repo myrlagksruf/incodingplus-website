@@ -1,18 +1,38 @@
 'use client'
 
-import { FC, useState, useRef, useLayoutEffect } from "react";
+import { FC, useState, useRef, useLayoutEffect, useEffect } from "react";
 import React from "react";
-
-export const BannerList:FC<{banners:string[][]}> = ({banners}) => {
+import type { iBanner } from "../page";
+export const BannerList:FC<{banners:iBanner[]}> = ({banners}) => {
     let elm = useRef<HTMLDivElement>(null);
     let setT = useRef<NodeJS.Timer>();
     let [ inner, setInner ] = useState({ width:0, height:0 });
     let [index, setIndex] = useState(0);
+    let [arr, setArr] = useState<iBanner[]>([
+        banners[(index - 1 + banners.length) % banners.length],
+        banners[index],
+        banners[(index + 1) % banners.length]
+    ]);
+    let [bannerState, setBannerState] = useState<-1|0|1>(0);
     let [flag, setFlag] = useState(false);
+    const nextBanner = () => {
+        clearInterval(setT.current);
+        setT.current = setInterval(nextBanner, 5000);
+        setBannerState(1);
+    };
+    const previousBanner = () => {
+        clearInterval(setT.current);
+        setT.current = setInterval(nextBanner, 5000);
+        setBannerState(-1);
+    };
+    const refreshIndex = () => {
+        setBannerState(0);
+        let ind = (index + bannerState + banners.length) % banners.length;
+        setIndex(ind);
+        setArr([banners[(ind - 1 + banners.length) % banners.length], banners[ind], banners[(ind + 1) % banners.length]])
+    }
     useLayoutEffect(() => {
-        setT.current = setInterval(() => {
-            setIndex(v => (v + 1) % banners.length);
-        }, 5000);
+        setT.current = setInterval(nextBanner, 5000);
         let re = new ResizeObserver(ents => {
             for(let ent of ents){
                 if(ent.target !== elm.current) continue;
@@ -32,27 +52,28 @@ export const BannerList:FC<{banners:string[][]}> = ({banners}) => {
             clearInterval(setT.current);
         }
     }, []);
+    useEffect(() => {
+        switch(bannerState){
+            case 0:console.log('');break;
+            case 1:;break;
+            case -1:;break;
+        }
+    }, [bannerState]);
     return (<div ref={elm} className="h-96 mb-10 w-full relative overflow-y-hidden overflow-x-hidden whitespace-nowrap">
-        {flag && <div className="flex w-full">
-            {banners.map((v, i) => <div key={i} className="absolute h-full flex-grow w-full" style={{
-                backgroundColor:inner.width < 768 ? v[3] : v[1],
+        {flag && <div className="flex w-full h-full">
+            {arr.map((v, i) => <div onTransitionEnd={refreshIndex} key={i} className="absolute h-full flex-grow w-full" style={{
+                backgroundColor:inner.width < 768 ? v.mobile.color: v.desktop.color,
                 top:0,
                 left:0,
-                transform:`translateX(calc(100% * ${i - index}))`,
-                transition:'transform 0.5s'
+                transform:bannerState !== 0 ? `translateX(${100 * i - 100 - bannerState * 100}%)` : `translateX(${100 * i - 100}%)`,
+                transition:bannerState !== 0 ? 'transform 0.5s' : "none"
             }}>
                 <div className="h-full bg-contain bg-no-repeat bg-center container m-auto overflow-hidden" style={{
-                    backgroundImage:`url("${inner.width < 768 ? v[4] : v[2]}")`,
+                    backgroundImage:`url("${inner.width < 768 ? v.mobile.url : v.desktop.url}")`,
                 }}></div>
             </div>)}
         </div>}
-        <svg onClick={() => {
-                setIndex((index - 1 + banners.length) % banners.length);
-                clearInterval(setT.current);
-                setT.current = setInterval(() => {
-                    setIndex(v =>  (v - 1 + banners.length) % banners.length);
-                }, 5000);
-            }} style={{
+        <svg onClick={previousBanner} style={{
             left:'max(calc(50% - 600px - 30px), 0px)',
             top:'50%',
             transform:'translateY(-50%)'
@@ -60,13 +81,7 @@ export const BannerList:FC<{banners:string[][]}> = ({banners}) => {
             <rect x="48" y="48" width="48" height="48" rx="24" transform="rotate(-180 48 48)" fill="black" fillOpacity="0.5"/>
             <path d="M26.586 12.5861L15.172 24.0001L26.586 35.4141L29.414 32.5861L20.828 24.0001L29.414 15.4141L26.586 12.5861Z" fill="white"/>
         </svg>
-        <svg onClick={() => {
-                setIndex((index + 1) % banners.length);
-                clearInterval(setT.current);
-                setT.current = setInterval(() => {
-                    setIndex(v => (v + 1) % banners.length);
-                }, 5000);
-            }} style={{
+        <svg onClick={nextBanner} style={{
             right:'max(calc(50% - 600px - 30px), 0px)',
             top:'50%',
             transform:'translateY(-50%)'

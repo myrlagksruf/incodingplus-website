@@ -18,6 +18,18 @@ interface iCurri{
   src:string;
 }
 
+export interface iBanner{
+  name:string;
+  desktop:{
+    color:string;
+    url:string;
+  };
+  mobile:{
+    color:string;
+    url:string;
+  }
+}
+
 const ImageButton:FC<iImageButton> = ({title, src, href}) => (<a target='_blank' href={href} className='flex items-center flex-col gap-4'>
     <img src={src} alt={title} />
     <strong>{title}</strong>
@@ -33,11 +45,25 @@ const Curri:FC<iCurri> = ({title, src}) => {
   </div>)
 }
 
+const DEFAULT_COLOR = 'rgb(75, 130, 195)';
+const DEFAULT_URL = '/logo.svg';
+
 export default async function Home() {
   const res = await getFileOrFolder(['root', 'banner'], 1);
   const sosicStringList = ((await getFileOrFolder(['root', 'sosic'], 0)) as MyFile[]).filter(v => v.type === 'folder');
-  let banners:string[][] = [];
-  if(res === null || !Array.isArray(res)) banners = [['default', 'rgb(75, 130, 195)', '/logo.svg']];
+  let banners:iBanner[] = [];
+  if(res === null || !Array.isArray(res))
+    banners = [{
+      name:'default', 
+      desktop:{
+        color:DEFAULT_COLOR, 
+        url:DEFAULT_URL
+      },
+      mobile:{
+        color:DEFAULT_COLOR,
+        url:DEFAULT_URL
+      }
+    }];
   else {
     const result = res
       .filter(v => /^root\/banner/.test(v.path) && v.type !== 'folder')
@@ -64,7 +90,17 @@ export default async function Home() {
         }
         return a;
       }, [] as string[][])
-      banners = result;
+      banners = result.map(v => ({
+        name:v[0],
+        desktop:{
+          color:v[1] ?? DEFAULT_COLOR,
+          url:v[2] ?? DEFAULT_URL,
+        },
+        mobile:{
+          color:v[3] ?? DEFAULT_COLOR,
+          url:v[4] ?? DEFAULT_URL,
+        }
+      }));
   }
   return (
     <ContainerMain>
