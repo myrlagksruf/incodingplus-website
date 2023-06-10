@@ -3,25 +3,27 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from 'react-markdown';
 import { getS3PublicUrl } from ".";
-import { FC, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { FC, useLayoutEffect, useMemo, useState } from "react";
 
-export const ReactMarkdownWrap:FC<{url:string}> = ({url}) => {
+export const ReactMarkdownWrap:FC<{url:string, onload:() => void}> = ({url, onload}) => {
     const [markdown, setMarkdown] = useState('');
-    const body = useRef<HTMLDivElement>(null);
     const origin = useMemo(() => getS3PublicUrl({ path: url.split('/').map(v => encodeURIComponent(v)).join('/')}), [url]);
     useLayoutEffect(() => {
-        if(body.current){
-            setMarkdown(`<div style="height:calc(${getComputedStyle(body.current).height} - 2rem)"></div>`);
-        }
         const getMarkdown = async () => {
-            const urlTemp = getS3PublicUrl({ path: url })
-            const res = await fetch(urlTemp, { cache:'no-cache' });
-            const text = await res.text();
-            setMarkdown(text);
+            try{
+                const urlTemp = getS3PublicUrl({ path: url })
+                const res = await fetch(urlTemp, { cache:'no-cache' });
+                const text = await res.text();
+                setMarkdown(text);
+            } catch(err){
+                console.error(err);
+            } finally{
+                onload();
+            }
         }
         getMarkdown();
     }, [url]);
-    return <div className="markdown-body" ref={body}>
+    return <div className="markdown-body">
         <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
             remarkPlugins={[remarkGfm]}

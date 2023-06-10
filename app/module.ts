@@ -1,4 +1,3 @@
-import { Document, WithId } from "mongodb";
 import { headers } from "next/headers";
 export const svgToURL = (str:string) => `data:image/svg+xml;utf8,${encodeURIComponent(str)}`;
 export const getOrigin = () => {

@@ -5,6 +5,7 @@ import { ReactMarkdownWrap } from "../utils/lib";
 export const SosicList:FC<{list:string[]}> = ({list}) => {
     const [index, setIndex] = useState(0);
     const body = useRef<HTMLDivElement>(null);
+    const [loading, setLoading] = useState(false);
     return (<div className="grid gap-3" style={{
         gridTemplateColumns:"1fr 2fr"
     }}>
@@ -17,7 +18,12 @@ export const SosicList:FC<{list:string[]}> = ({list}) => {
                     result = v.slice((mat.index ?? -1) + 1)
                 }
                 return <div
-                    onClick={() => setIndex(i)}
+                    onClick={() => {
+                        if(!loading){
+                            setLoading(true);
+                            setIndex(i)
+                        }
+                    }}
                     style={{
                         fontFamily: 'NanumSquare'
                     }}
@@ -30,7 +36,7 @@ export const SosicList:FC<{list:string[]}> = ({list}) => {
         <div ref={body} className="pt-8 mt-8 markdown-body" style={{
             transition:'height 0.5s'
         }}>
-            <ReactMarkdownWrap url={`root/sosic/${list[index]}/index.md`} />
+            <ReactMarkdownWrap url={`root/sosic/${list[index]}/index.md`} onload={() => setLoading(false)} />
         </div>
     </div>)
 }
