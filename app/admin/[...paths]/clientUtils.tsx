@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { getS3PublicUrl } from "@/app/utils";
+import mime from 'mime-types';
 
 const uploadFunc = async (upload:iUpload, router:ReturnType<typeof useRouter>) => {
     try{
@@ -159,15 +160,17 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
             }
             let pros:Promise<MyFile>[] = []; 
             for(let i of input.current.files){
-                if(!i.type.startsWith('text') && !i.type.startsWith('image') && i.type !== 'application/json'){
-                    console.log(`${i.type}은 text 또는 image 또는 json이 아닙니다.`)
+                let type = i.type;
+                if(type) type = mime.lookup(i.name) ? mime.lookup(i.name) as string : 'application/octet-stream';
+                if(!type.startsWith('text') && !type.startsWith('image') && type !== 'application/json'){
+                    alert(`${type}은 text 또는 image 또는 json이 아닙니다.`)
                     continue;
                 }
                 if(i.size > MAX_SIZE){
-                    console.log(`${i.name}의 크기는 ${i.size}로 너무 큽니다.`);
+                    alert(`${i.name}의 크기는 ${i.size}로 너무 큽니다.`);
                     continue;
                 }
-                pros.push(reader(i));
+                pros.push(reader(new File([i], i.name, { type, lastModified:i.lastModified })));
             }
             const results = await Promise.all(pros);
             setUpload({files:results, command:'PATCH'});
