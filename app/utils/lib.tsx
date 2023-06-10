@@ -15,7 +15,7 @@ export const ReactMarkdownWrap:FC<{url:string}> = ({url}) => {
         }
         const getMarkdown = async () => {
             const urlTemp = getS3PublicUrl({ path: url })
-            const res = await fetch(urlTemp);
+            const res = await fetch(urlTemp, { cache:'no-cache' });
             const text = await res.text();
             setMarkdown(text);
         }
@@ -32,7 +32,7 @@ export const ReactMarkdownWrap:FC<{url:string}> = ({url}) => {
                         const result = new URL(href, origin);
                         hrefObj.href = result.href;
                     }
-                    return <a {...props} className={className} {...hrefObj}>{href}{children}</a>
+                    return <a {...props} className={className} {...hrefObj}>{children}</a>
                 },
                 img({node, className, src, ...props}){
                     const srcObj:{src?:string} = {};
