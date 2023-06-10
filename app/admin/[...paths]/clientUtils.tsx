@@ -163,7 +163,8 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
                 let type = i.type;
                 if(type) type = mime.lookup(i.name) ? mime.lookup(i.name) as string : 'application/octet-stream';
                 if(!type.startsWith('text') && !type.startsWith('image') && type !== 'application/json'){
-                    alert(`${type}은 text 또는 image 또는 json이 아닙니다.`)
+                    alert(`${i.name} 파일의 타입은 ${type}로 text 또는 image 또는 json이 아닙니다.`);
+                    console.log(i);
                     continue;
                 }
                 if(i.size > MAX_SIZE){
