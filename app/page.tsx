@@ -48,7 +48,7 @@ const Curri:FC<iCurri> = ({title, src}) => {
 const DEFAULT_COLOR = 'rgb(75, 130, 195)';
 const DEFAULT_URL = '/logo.svg';
 
-export default async function Home() {
+export default async function Home(params: {}) {
   const res = await getFileOrFolder(['root', 'banner'], 1);
   const sosicStringList = ((await getFileOrFolder(['root', 'sosic'], 0)) as MyFile[]).filter(v => v.type === 'folder');
   let banners:iBanner[] = [];
@@ -124,3 +124,5 @@ export default async function Home() {
     </ContainerMain>
   )
 }
+
+export const dynamic = 'force-dynamic'
