@@ -6,9 +6,46 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { getS3PublicUrl } from "@/app/utils";
 import mime from 'mime-types';
+import { S3 } from '@aws-sdk/client-s3';
+import './clientUtils.css'
 
-const uploadFunc = async (upload:iUpload, router:ReturnType<typeof useRouter>) => {
+const Bucket = 'cdn.in-coding.com';
+/** Base64 인코딩된 바이너리 파일을 s3에 업로드 */
+async function uploadBinaryFile(s3:S3, file: MyFile){
+    if(!file.data.includes('base64')){
+        // file.data like 'data:image/png;base64,~~'
+        return ''
+    }
+    const data = Buffer.from(file.data.split(',')[1], 'base64')
+    const Key = `public/${file.path}` // ex. file.path == root/curriculum/1.커리큘럼.1.입시반/desktop.svg
+
+    await s3.putObject({
+        Bucket,
+        Key,
+        Body: data, 
+        ContentType: file.type,
+        ACL: 'public-read',
+
+    })
+
+    return getS3PublicUrl(file)
+}
+
+const uploadFunc = async (upload:iUpload, router:ReturnType<typeof useRouter>, onEnd:() => void) => {
     try{
+        if(upload.command === 'PATCH'){
+            const res = await fetch('/mongodb/protected/auth');
+            const credentials = (await res.json()) as { accessKeyId:string, secretAccessKey:string};
+            const s3 = new S3({
+                credentials,
+                region: 'ap-northeast-2',
+            });
+            await Promise.all(upload.files.map(async file => {
+                if(file.data.includes('base64')){
+                    file.data = await uploadBinaryFile(s3, file);
+                }
+            }))
+        }
         const res = await fetch('/mongodb/protected', {
             method:upload.command,
             headers:{
@@ -20,8 +57,9 @@ const uploadFunc = async (upload:iUpload, router:ReturnType<typeof useRouter>) =
             alert(`${res.status} : ${res.statusText}`);
         }
     } catch(err){
-        alert(err)
+        alert(err);
     }
+    onEnd();
     router.refresh();
 }
 
@@ -30,10 +68,19 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
     const log = useMemo(() => file.size ? Math.log2(file.size) : 0, [file]);
     const router = useRouter();
     const [download, setDownload] = useState(false);
+    const [command, setCommand] = useState('');
     const [upload, setUpload] = useState<iUpload>({files:[], command:''});
+    const modalContainer = useRef<HTMLDivElement>();
+    useEffect(() => {
+        const modalTemp = document.querySelector<HTMLDivElement>('#modal-container');
+        if(modalTemp){
+            modalContainer.current = modalTemp;
+        }
+    }, []);
     useEffect(() => {
         if(upload.command !== '') {
-            uploadFunc(upload, router);
+            setCommand('loading');
+            uploadFunc(upload, router, () => setCommand(''));
             setUpload({files:[], command:''});
         }
     }, [upload]);
@@ -59,6 +106,7 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
     const href = file.type === 'folder' ? folderUrl : fileUrl
 
     return <div className="contents">
+        {command === 'loading' && createPortal(<Loading />, modalContainer.current as HTMLDivElement)}
         <Link href={href} className="p-1"></Link>
         <Link href={href} className="p-1">{file.name}</Link>
         <Link href={href} className="p-1">{file.lastModified ? file.lastModified : ''}</Link>
@@ -78,8 +126,9 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
                 !file.isPersistent && 
                 <button
                     onClick={() => {
-                        if(confirm(`정말로 "${file.name}"를 삭제하시겠습니까?`))
+                        if(confirm(`정말로 "${file.name}"를 삭제하시겠습니까?`)){
                             setUpload({files:[file], command:'POST'});
+                        }
                     }}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                 >
@@ -123,12 +172,25 @@ const Modal:FC<{title:string; types?:[string, string][];onSuccess:(data:string[]
     </div>
 }
 
+const Loading:FC = () => {
+    return <div className="bg-opacity-70 bg-black flex items-center justify-center" style={{
+        width:'100vw', height:'calc(100 * var(--vh, 1vh))'
+    }}>
+        <div className="w-16 h-16 loading" style={{
+            backgroundImage:"url(/loading.svg)",
+            backgroundSize:'contain',
+            backgroundPosition:'center',
+            backgroundRepeat:'no-repeat'
+        }}></div>
+    </div>
+}
+
 interface iUpload{
     files:MyFile[];
     command:'PUT'|'POST'|'PATCH'|'';
 }
 
-const MAX_SIZE = 10_000_000;
+const MAX_SIZE = 50_000_000;
 export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params, names}) => {
     const input = useRef<HTMLInputElement>(null);
     const modalContainer = useRef<HTMLDivElement>();
@@ -164,7 +226,6 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
                 if(!type) type = mime.lookup(i.name) ? mime.lookup(i.name) as string : 'application/octet-stream';
                 if(!type.startsWith('text') && !type.startsWith('image') && type !== 'application/json'){
                     alert(`${i.name} 파일의 타입은 ${type}로 text 또는 image 또는 json이 아닙니다.`);
-                    console.log(i);
                     continue;
                 }
                 if(i.size > MAX_SIZE){
@@ -175,19 +236,17 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
             }
             const results = await Promise.all(pros);
             setUpload({files:results, command:'PATCH'});
-            setCommand('');
         };
 
         if(command === 'file'){
             filePick();
         }
-        setCommand('');
     }, [command]);
 
 
     useEffect(() => {
         if(upload.command !== '') {
-            uploadFunc(upload, router);
+            uploadFunc(upload, router, () => setCommand(''));
             setUpload({files:[], command:''});
         }
     }, [upload]);
@@ -202,6 +261,7 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
     return <div className="flex justify-between items-center" style={{
         gridColumnStart:'span 6'
     }}>
+        {command === 'loading' && createPortal(<Loading />, modalContainer.current as HTMLDivElement)}
         <div className="p-1">/{decodeURIComponent(params.paths.slice(1).join('/'))}</div>
         <div>
             <input ref={input} type="file" multiple style={{
@@ -227,6 +287,7 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
                                 alert('이름의 앞 또는 끝이 비어있으면 안됩니다.');
                                 return;
                             }
+                            setCommand('loading');
                             setUpload({
                                 files:[{
                                     path:decodeURIComponent(`${params.paths.join('/')}/${data[0]}`),

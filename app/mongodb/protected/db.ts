@@ -1,36 +1,5 @@
 import { MyFile } from "@/app/type";
 import { handler } from "../setting";
-import { S3 } from '@aws-sdk/client-s3'
-import { getS3PublicUrl } from "@/app/utils";
-
-const s3 = new S3({
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? '',
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? ''
-    },
-    region: 'ap-northeast-2',
-})
-
-/** Base64 인코딩된 바이너리 파일을 s3에 업로드 */
-async function uploadBinaryFile(file: MyFile){
-    if(!file.data.includes('base64')){
-        // file.data like 'data:image/png;base64,~~'
-        return ''
-    }
-
-    const data = Buffer.from(file.data.split(',')[1], 'base64')
-    const Key = `public/${file.path}` // ex. file.path == root/curriculum/1.커리큘럼.1.입시반/desktop.svg
-
-    await s3.putObject({
-        Bucket: 'cdn.in-coding.com',
-        Key,
-        Body: data, 
-        ContentType: file.type,
-        ACL: 'public-read'
-    })
-
-    return getS3PublicUrl(file)
-}
 
 export async function updateFiles(files:MyFile[]){
     const {collection} = await handler();
@@ -39,13 +8,6 @@ export async function updateFiles(files:MyFile[]){
     }).project<Pick<MyFile, 'path' | 'type'>>({
         path:1, type:1
     }).toArray();
-
-    // base64 인코딩된 파일은 모두 s3 로 업로드
-    await Promise.all(files.map(async file => {
-        if(file.data.includes('base64')){
-            file.data = await uploadBinaryFile(file)
-        }
-    }))
 
     const docu = await collection.bulkWrite(files.filter(v => {
         let existsDoc = existsDocuments.find(t => t.path === v.path);;
