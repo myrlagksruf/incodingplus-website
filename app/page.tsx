@@ -19,15 +19,17 @@ interface iCurri{
 }
 
 export interface iBanner{
-  name:string;
-  desktop:{
-    color:string;
-    url:string;
-  };
+  path:string;
   mobile:{
-    color:string;
     url:string;
-  }
+    backgroundColor:string;
+    href:string;
+  };
+  desktop:{
+      url:string;
+      backgroundColor:string;
+      href:string;
+  };
 }
 
 const ImageButton:FC<iImageButton> = ({title, src, href}) => (<a target='_blank' href={href} className='flex items-center flex-col gap-4'>
@@ -46,61 +48,38 @@ const Curri:FC<iCurri> = ({title, src}) => {
 }
 
 const DEFAULT_COLOR = 'rgb(75, 130, 195)';
-const DEFAULT_URL = '/logo.svg';
+const DEFAULT_URL = 'logo.svg';
 
-export default async function Home(params: {}) {
+export default async function Home() {
   const res = await getFileOrFolder(['root', 'banner'], 1);
   const sosicStringList = ((await getFileOrFolder(['root', 'sosic'], 0)) as MyFile[]).filter(v => v.type === 'folder');
   let banners:iBanner[] = [];
   if(res === null || !Array.isArray(res))
     banners = [{
-      name:'default', 
+      path:"root",
       desktop:{
-        color:DEFAULT_COLOR, 
+        backgroundColor:DEFAULT_COLOR, 
+        href:"",
         url:DEFAULT_URL
       },
       mobile:{
-        color:DEFAULT_COLOR,
+        backgroundColor:DEFAULT_COLOR,
+        href:"",
         url:DEFAULT_URL
       }
     }];
   else {
-    const result = res
-      .filter(v => /^root\/banner/.test(v.path) && v.type !== 'folder')
-      .sort((a, b) => a.path.localeCompare(b.path))
-      .reduce((a, v) => {
-        let [title, img] = v.path.split('/').slice(2);
-        let find = a.find(t => t[0] === title);
-        if(!find) {
-          find = [title];
-          a.push(find);
-        }
-        let check = img.split('.')[0];
-        let back = img.split('.')[1];
-        if(check === 'desktop'){
-          find[1] = back;
-          find[2] = getS3PublicUrl({
-            path: v.path.split('/').map(encodeURIComponent).join('/')
-          })
-        } else if(check === 'mobile'){
-          find[3] = back;
-          find[4] = getS3PublicUrl({
-            path: v.path.split('/').map(encodeURIComponent).join('/')
-          })
-        }
-        return a;
-      }, [] as string[][])
-      banners = result.map(v => ({
-        name:v[0],
-        desktop:{
-          color:v[1] ?? DEFAULT_COLOR,
-          url:v[2] ?? DEFAULT_URL,
-        },
-        mobile:{
-          color:v[3] ?? DEFAULT_COLOR,
-          url:v[4] ?? DEFAULT_URL,
-        }
-      }));
+    const getJson = async (file:Pick<MyFile,"path">) => {
+      const response = await fetch(getS3PublicUrl(file));
+      const json = (await response.json()) as iBanner;
+      json.path = file.path.split('/').slice(0, -1).join('/')
+      return json;
+    }
+    const result = res.filter(v => /^root\/banner/.test(v.path) && v.name === 'setting.json');
+    
+    const arr:Promise<iBanner>[] = [];
+    for(let i of result) arr.push(getJson(i));
+    banners = await Promise.all(arr);
   }
   return (
     <ContainerMain>
