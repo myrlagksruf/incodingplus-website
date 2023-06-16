@@ -2,6 +2,7 @@
 
 import { FC, ReactNode, createContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import './container.css';
 type iModalState = {
     type:string;
     data:string[]|string;
@@ -73,22 +74,18 @@ export const Container:FC<{children:ReactNode}> = ({children}) => {
             modalContainer.current = modalTemp;
         }
     }, []);
-    return <div className="box-border control-section grid items-center" style={{
-        gridTemplateColumns:'max-content 2fr max-content max-content 1fr max-content',
+    return <ModalContext.Provider value={{
+        modal, setModal
     }}>
-        <ModalContext.Provider value={{
-            modal, setModal
-        }}>
-            {modal?.type === 'loading' && createPortal(<Loading />, modalContainer.current as HTMLDivElement)}
-            {modal?.type === 'folder-modal' && createPortal(
-                <Modal
-                    onSuccess={data => setModal({type:'folder-modal', data})}
-                    onAboart={() => setModal({ type:'', data:''})}
-                    title="새 폴더 만들기"
-                    types={[['폴더명', 'text']]}
-                />, modalContainer.current as HTMLDivElement)
-            }
-            {children}
-        </ModalContext.Provider>
-    </div>
+        {modal?.type === 'loading' && createPortal(<Loading />, modalContainer.current as HTMLDivElement)}
+        {modal?.type === 'folder-modal' && createPortal(
+            <Modal
+                onSuccess={data => setModal({type:'folder-modal', data})}
+                onAboart={() => setModal({ type:'', data:''})}
+                title="새 폴더 만들기"
+                types={[['폴더명', 'text']]}
+            />, modalContainer.current as HTMLDivElement)
+        }
+        {children}
+    </ModalContext.Provider>
 }

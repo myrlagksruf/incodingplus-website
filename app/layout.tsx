@@ -57,6 +57,7 @@ export default async function RootLayout({
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" />
         <link rel="icon" type="image/svg+xml" href="/ico/favicon.svg" />
         <link rel="icon" type="image/png" href="/ico/favicon.png" />
+        <link href="http://cdn.jsdelivr.net/gh/joungkyun/font-d2coding/d2coding.css" rel="stylesheet" type="text/css" />
         <meta name="referrer" content="no-referrer-when-downgrade" />
         <Resize />
         <script src="/ga.js"></script>

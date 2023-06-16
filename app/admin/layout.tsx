@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { allow } from "../api/auth/[...nextauth]/route";
 import { getOrigin } from "../module";
+import { Container } from "./container";
 
 interface iUser{
     user:{
@@ -40,6 +41,8 @@ export default async function RootLayout({
         <div id="modal-container" className="absolute left-0 top-0" style={{
             zIndex:9999
         }}></div>
-        {children}
+        <Container>
+            {children}
+        </Container>
     </>
 }

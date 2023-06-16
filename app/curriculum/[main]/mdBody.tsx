@@ -9,7 +9,7 @@ export const MDBody:FC<{ mdUrl: string }> = ({ mdUrl }) => {
 
     useLayoutEffect(() => {
         const getMarkdown = async () => {
-            const res = await fetch(mdUrl);
+            const res = await fetch(mdUrl, { cache:'no-cache'});
             const text = await res.text();
             setMarkdown(text);
         }

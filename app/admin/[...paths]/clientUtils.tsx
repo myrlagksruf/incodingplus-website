@@ -3,14 +3,10 @@ import { MyFile, iUpload } from "@/app/type";
 import { FC, useContext, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createPortal } from "react-dom";
 import { getS3PublicUrl } from "@/app/utils";
-import { uploadFile, deleteFile, uploadFolder } from "./uploadFunc";
+import { uploadFile, deleteFile, uploadFolder, reader } from "./uploadFunc";
 import mime from 'mime-types';
-import './clientUtils.css'
-import { ModalContext } from "./container";
-
-
+import { ModalContext } from "@/app/admin/container";
 
 const SIZE = ['B', 'KB', 'MB', 'GB', 'TB'];
 export const FileView:FC<{file:MyFile}> = ({file}) => {
@@ -51,15 +47,24 @@ export const FileView:FC<{file:MyFile}> = ({file}) => {
     const fileUrl = getS3PublicUrl({
         path: file.path.split('/').map(encodeURIComponent).join('/')
     })
-    const href = file.type === 'folder' ? folderUrl : fileUrl
-
+    const href = file.type === 'folder' ? folderUrl : fileUrl;
     return <div className="contents">
         <Link href={href} className="p-1"></Link>
         <Link href={href} className="p-1">{file.name}</Link>
         <Link href={href} className="p-1">{file.lastModified ? file.lastModified : ''}</Link>
         <Link href={href} className="p-1">{file.type}</Link>
         <Link href={href} className="p-1">{file.size ? `${(2 ** (log % 10)).toPrecision(4)}${SIZE[Math.floor(log / 10)]}` : ''}</Link>
-        <div className="p-1">
+        <div className="p-1 text-right">
+            {
+                (file.type === 'application/json' || file.type.includes('text')) &&
+                <a 
+                    className="inline-block bg-lime-500 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded"
+                    target="_blank"
+                    href={`/admin/edit/${file.path}`}
+                >
+                    수정하기
+                </a>
+            }
             {
                 file.type !== 'folder' &&
                 <button
@@ -94,21 +99,6 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
     const { modal, setModal } = useContext(ModalContext);
     const router = useRouter();
     useEffect(() => {
-        // Command useEffect
-        const reader = async (file:File):Promise<MyFile> => {
-            let read = new FileReader();
-            read.readAsDataURL(file);
-            await new Promise(res => read.onload = res);
-            return {
-                path:decodeURIComponent(`${params.paths.join('/')}/${file.name}`),
-                name:file.name,
-                type:file.type,
-                lastModified:file.lastModified,
-                size:(read.result as string).length,
-                data:read.result as string,
-                pathCount:params.paths.length + 1
-            } 
-        }
         const filePick = async () => {
             setCommand('loading');
             if(!input.current || !input.current.files){
@@ -127,7 +117,7 @@ export const PanelView:FC<{params:{paths:string[]}, names:string[]}> = ({params,
                     alert(`${i.name}의 크기는 ${i.size}로 너무 큽니다.`);
                     continue;
                 }
-                pros.push(reader(new File([i], i.name, { type, lastModified:i.lastModified })));
+                pros.push(reader(new File([i], i.name, { type, lastModified:i.lastModified }), params.paths));
             }
             const results = await Promise.all(pros);
             setUpload({files:results, command:'PATCH'});

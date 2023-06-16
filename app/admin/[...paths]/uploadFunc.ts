@@ -32,6 +32,7 @@ export const uploadFile = async (files:MyFile[], onEnd:() => void) => {
             region: 'ap-northeast-2',
         });
         await Promise.all(files.map(async file => {
+            console.log(file);
             if(file.data.includes('base64')){
                 file.data = await uploadBinaryFile(s3, file);
             }
@@ -88,4 +89,19 @@ export const deleteFile = async (file:MyFile, onEnd:() => void) => {
         alert(err);
     }
     onEnd();
+}
+
+export const reader = async (file:File, paths:string[]):Promise<MyFile> => {
+    let read = new FileReader();
+    read.readAsDataURL(file);
+    await new Promise(res => read.onload = res);
+    return {
+        path:decodeURIComponent(`${paths.join('/')}/${file.name}`),
+        name:file.name,
+        type:file.type,
+        lastModified:file.lastModified,
+        size:(read.result as string).length,
+        data:read.result as string,
+        pathCount:paths.length + 1
+    } 
 }
