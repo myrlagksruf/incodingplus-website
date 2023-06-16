@@ -2,7 +2,7 @@
 
 import { FC, useState, useRef, useLayoutEffect } from "react";
 import React from "react";
-import type { iBanner } from "../page";
+import type { iBanner } from "../type";
 import { getS3PublicUrl } from "../utils";
 export const BannerList:FC<{banners:iBanner[]}> = ({banners}) => {
     let elm = useRef<HTMLDivElement>(null);
@@ -64,7 +64,7 @@ export const BannerList:FC<{banners:iBanner[]}> = ({banners}) => {
                 transition:bannerState !== 0 ? 'transform 0.5s' : "none"
             }}>
                 <a href={inner.width < 768 ? v.mobile.href : v.desktop.href} target="_blank" className="h-full block bg-contain bg-no-repeat bg-center container m-auto overflow-hidden" style={{
-                    backgroundImage:`url("${getS3PublicUrl({path:`${v.path}/${inner.width < 768 ? v.mobile.url : v.desktop.url}`})}")`,
+                    backgroundImage:`url("${getS3PublicUrl({path:`root${inner.width < 768 ? v.mobile.url : v.desktop.url}`})}")`,
                 }}></a>
             </div>)}
         </div>}

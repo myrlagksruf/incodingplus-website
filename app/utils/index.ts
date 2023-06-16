@@ -5,4 +5,10 @@ const getS3PublicUrl = (file: Pick<MyFile, 'path'>) => {
 
 }
 
-export { getS3PublicUrl }
+const getSetting = async <T>(url:string) => {
+  const res = await fetch(getS3PublicUrl({path:url}));
+  const json = await res.json();
+  return json as T;
+}
+
+export { getS3PublicUrl, getSetting }

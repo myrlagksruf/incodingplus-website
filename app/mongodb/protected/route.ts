@@ -25,8 +25,8 @@ export async function PATCH(request:NextRequest){
 export async function PUT(req:NextRequest){
     try{
         if(await check(req)){
-            const json = (await req.json()) as MyFile[];
-            const docu = await insertFolder(json[0].path);
+            const json = (await req.json()) as MyFile;
+            const docu = await insertFolder(json.path);
             if(!docu) throw JSON.stringify(docu);
             return new NextResponse(JSON.stringify(docu));
         }
@@ -45,8 +45,8 @@ export async function PUT(req:NextRequest){
 export async function POST(req:NextRequest){
     try{
         if(await check(req)){
-            const json = (await req.json()) as MyFile[];
-            const docu = await deleteFileOrFolder(json[0].path);
+            const json = (await req.json()) as MyFile;
+            const docu = await deleteFileOrFolder(json.path);
             if(!docu) throw JSON.stringify(docu);
             return new NextResponse(JSON.stringify(docu));
         }
