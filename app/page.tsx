@@ -37,7 +37,6 @@ const Curri:FC<iCurri> = ({title, src, href}) => {
 const DEFAULT_COLOR = 'rgb(75, 130, 195)';
 const DEFAULT_URL = '/logo.svg';
 
-
 export default async function Home() {
   const [banners, curri, sosicStringListRaw] = await Promise.all([
     getSetting<iBanner[]>("root/banner/setting.json"),

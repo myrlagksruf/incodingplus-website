@@ -63,8 +63,9 @@ export const BannerList:FC<{banners:iBanner[]}> = ({banners}) => {
                 transform:bannerState !== 0 ? `translateX(${100 * i - 100 - bannerState * 100}%)` : `translateX(${100 * i - 100}%)`,
                 transition:bannerState !== 0 ? 'transform 0.5s' : "none"
             }}>
-                <a href={inner.width < 768 ? v.mobile.href : v.desktop.href} target="_blank" className="h-full block bg-contain bg-no-repeat bg-center container m-auto overflow-hidden" style={{
+                <a href={inner.width < 768 ? v.mobile.href : v.desktop.href} target="_blank" className="h-full block bg-no-repeat bg-center m-auto overflow-hidden" style={{
                     backgroundImage:`url("${getS3PublicUrl({path:`root${inner.width < 768 ? v.mobile.url : v.desktop.url}`})}")`,
+                    backgroundSize:'auto 100%'
                 }}></a>
             </div>)}
         </div>}
