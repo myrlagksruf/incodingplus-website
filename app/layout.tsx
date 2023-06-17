@@ -26,7 +26,7 @@ const Footer = () => {
     }}>
       <div>대표: 김정준 | 개인정보관리책임자 : 김정준</div>
       <br />
-      <div>소재지: 경기도 안산시 단원구 광덕동로 41, 로진프라자 3층 인코딩프러스</div>
+      <div>소재지: 경기도 안산시 단원구 광덕동로 41, 로진프라자 3층 인코딩플러스</div>
       <div>전화번호: 010-2838-2391</div>
       <div>사업자번호: 847-81-00387</div>
       <div>Copyright 2023. 인코딩플러스 Co. all rights reserved.</div>
@@ -58,8 +58,10 @@ export default async function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/ico/favicon.svg" />
         <link rel="icon" type="image/png" href="/ico/favicon.png" />
         <link href="https://cdn.jsdelivr.net/gh/joungkyun/font-d2coding/d2coding.css" rel="stylesheet" type="text/css" />
+        <link href="https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo.css" rel="stylesheet" />
+
+
         <meta name="referrer" content="no-referrer-when-downgrade" />
-        <Resize />
         <script src="/ga.js"></script>
       </head>
       <body className='flex flex-col'>
@@ -75,7 +77,9 @@ export default async function RootLayout({
           </iframe>
         </noscript>
         <Header files={mains} />
-        <div className='flex flex-col flex-grow'>{children}</div>
+        <Resize>
+          <div className='flex flex-col flex-grow'>{children}</div>
+        </Resize>
         <Footer />
       </body>
     </html>

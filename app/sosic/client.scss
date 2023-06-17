@@ -1,0 +1,30 @@
+.sosic-container{
+    grid-template-columns: 1fr 2fr;
+}
+@media screen and (max-width:767px) {
+    .sosic-container{
+        grid-template-columns: 1fr;
+    }
+}
+
+.sosic-list{
+    position: relative;
+    color:hsl(210, 100%, 25%);
+    font-size: 1rem;
+    padding-left: 24px;
+    &::before{
+        content: "▶ ";
+        position: absolute;
+        left:0;     
+    }
+    &.sosic-disable{
+        &::before{
+            content: "";        
+        }
+        color:hsl(0, 0%, 40%);
+        font-size: 1rem;
+        &:hover{
+            color:#fcbd0e;
+        }
+    }
+}

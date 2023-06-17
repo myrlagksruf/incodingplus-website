@@ -53,7 +53,10 @@ export default async function Home() {
         <ImageButton href='https://blog.naver.com/incodingplus' title='블로그 보기' src="/image/blog.svg" />
       </ContainerMin>
       <ContainerMin>
-        <h2 className='text-xl font-black mt-14'>커리큘럼 소개</h2>
+        <h1 className='text-xl font-black mt-14 tracking-wider' style={{
+          fontFamily:"NanumSquareNeo",
+          fontSize:"2em"
+        }}>| 커리큘럼 소개</h1>
         <div className='flex flex-wrap justify-between'>
           {curri.map((v, i) => <Curri title={v.name} src={v.src} href={v.href} key={i} />)}
         </div>

@@ -4,7 +4,6 @@ import { FC, createContext, useContext, useEffect, useMemo, useRef, useState } f
 import logo from '@/public/logo.svg';
 import Link from 'next/link';
 import './Header.scss';
-import { MyFile } from '../type';
 
 const Pos = createContext<number[]>([]);
 
@@ -26,13 +25,14 @@ const HEIGHT = 64;
 
 const MenuContainer:FC<iMenuContainer> = ({menus}) => {
     return <div
-        className='menu-container flex-grow grid justify-between relative'
+        className='menu-container flex-grow grid justify-between relative pr-8'
         style={{
             minWidth:'300px',
             maxWidth:'600px',
-            gridTemplateColumns: `repeat(${menus.length}, max-content)`
+            gridTemplateColumns: `repeat(${menus.length}, max-content)`,
+            fontFamily:"NanumSquareNeo"
         }}>
-        {menus.map((v, i) => (<div className='w-fit menu relative main-menu font-bold text-gray-900' key={i}><Link href={v.href}>{v.name}</Link></div>))}
+        {menus.map((v, i) => (<div className='w-fit menu relative main-menu font-extrabold text-lg text-gray-900' key={i}><Link href={v.href}>{v.name}</Link></div>))}
   </div>
 }
 
@@ -87,7 +87,7 @@ export const Header:FC<{files:string[][]}> = ({files}) => {
                 <div className='flex gap-4 items-center justify-around w-full box-border' style={{
                     maxWidth:'120rem',
                 }}>
-                    <Link href="/">
+                    <Link href="/" className='pr-12'>
                         <Image
                             src={logo}
                             alt="logo image"
