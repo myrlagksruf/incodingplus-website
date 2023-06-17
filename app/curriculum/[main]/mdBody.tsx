@@ -26,7 +26,7 @@ export const MDBody:FC<{ mdUrl: string }> = ({ mdUrl }) => {
                   const result = new URL(href, mdUrl);
                   hrefObj.href = result.href;
               }
-              return <a {...props} className={className} {...hrefObj}>{href}{children}</a>
+              return <a {...props} target="_blank" className={className} {...hrefObj}>{children}</a>
           },
           img({node, className, src, ...props}){
               const srcObj:{src?:string} = {};
