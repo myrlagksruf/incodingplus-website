@@ -4,6 +4,7 @@ import { Header } from './header/Header';
 import { Resize } from './layoutClient';
 import { getFileOrFolder } from './mongodb/public/list/[...paths]/db';
 import { MyFile } from './type';
+import 'primereact/resources/themes/saga-blue/theme.css'
 
 export const metadata = {
   title: '인코딩 플러스 코딩 학원',

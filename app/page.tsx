@@ -53,7 +53,7 @@ export default async function Home() {
         <ImageButton href='https://blog.naver.com/incodingplus' title='블로그 보기' src="/image/blog.svg" />
       </ContainerMin>
       <ContainerMin>
-        <h1 className='text-xl font-black mt-14 tracking-wider' style={{
+        <h1 className='text-xl font-black mt-14 tracking-wider mb-6' style={{
           fontFamily:"NanumSquareNeo",
           fontSize:"2em"
         }}>| 커리큘럼 소개</h1>
@@ -62,6 +62,10 @@ export default async function Home() {
         </div>
       </ContainerMin>
       <ContainerMin className='my-16'>
+        <h1 className='text-xl font-black mt-14 mb-6 tracking-wider' style={{
+          fontFamily:"NanumSquareNeo",
+          fontSize:"2em"
+        }}>| 인코딩플러스 소식</h1>
         <SosicList list={sosicStringList.map(v => v.name)} />
       </ContainerMin>
     </ContainerMain>
