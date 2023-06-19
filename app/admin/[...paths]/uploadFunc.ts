@@ -92,16 +92,20 @@ export const deleteFile = async (file:MyFile, onEnd:() => void) => {
 }
 
 export const reader = async (file:File, paths:string[]):Promise<MyFile> => {
-    let read = new FileReader();
+    const read = new FileReader();
     read.readAsDataURL(file);
     await new Promise(res => read.onload = res);
+    let data = read.result as string;
+    if(!data.includes('base64')){
+        data = `data:${file.type};base64,`;
+    }
     return {
         path:decodeURIComponent(`${paths.join('/')}/${file.name}`),
         name:file.name,
         type:file.type,
         lastModified:file.lastModified,
-        size:(read.result as string).length,
-        data:read.result as string,
+        size:data.length,
+        data,
         pathCount:paths.length + 1
     } 
 }

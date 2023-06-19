@@ -33,7 +33,6 @@ export const EditorContainer:FC<{value:string;type:string,paths:string[]}> = ({v
             router.refresh();
         });
     }
-    console.log(languages.json, languages.markdown)
     return <div className="relative">
         <Editor
             value={code}
@@ -48,7 +47,8 @@ export const EditorContainer:FC<{value:string;type:string,paths:string[]}> = ({v
             disabled={false}
             padding={10}
             style={{
-                fontFamily: "D2Coding"
+                fontFamily: "D2Coding",
+                border:"1px solid black"
             }}
             tabSize={2}
         />

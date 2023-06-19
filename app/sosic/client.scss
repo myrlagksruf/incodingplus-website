@@ -1,5 +1,7 @@
-li, a{
-    display: inline-block;
-    cursor: pointer;
-    transition: all 0.5s;
-}
+.p-tabview-nav{
+    li, a{
+      display: inline-block;
+      cursor: pointer;
+      transition: all 0.5s;
+    }
+  }

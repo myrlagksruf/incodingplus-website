@@ -8,7 +8,7 @@ export default function Page(){
             <img src="/introduce/first.svg" />
         </div>
         <ContainerMin>
-            <div className="flex mb-3 introduce lg:flex-row flex-col mb-14">
+            <div className="flex introduce lg:flex-row flex-col mb-14">
                 <img src="/introduce/image.png" className="lg:w-2/4" />
                 <div className="lg:w-2/4 box-border pl-5">
                     <h1>코딩과 논술로 진로를 컨설팅하다</h1>
