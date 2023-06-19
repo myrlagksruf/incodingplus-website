@@ -46,6 +46,11 @@
     .card{
         .p-menubar{
             justify-content: space-between;
+            &.p-menubar-mobile-active{
+                .p-menubar-root-list{
+                    display: flex;
+                }
+            }
             .p-menubar-button{
                 display: flex;
                 width: 2rem;
