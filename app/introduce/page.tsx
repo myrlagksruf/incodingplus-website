@@ -33,10 +33,8 @@ export default function Page(){
                 미래 사회를 준비할 수 있습니다
             </h1>
             <div className="flex flex-wrap justify-center mb-10">
-                <div className="grid items-center flex-grow mb-6 px-6" style={{
+                <div className="grid items-center flex-grow mb-6 md:w-2/4" style={{
                     gridTemplateColumns:"100px 1fr",
-                    minWidth:'450px',
-                    flexBasis:'50%'
                 }}>
                     <div className="pt-2 pb-2 text-right mr-6 font-medium text-gray-600">주소</div>
                     <div className="font-bold">안산시 단원구 광덕동로 41 로진프라자, 3층 인코딩플러스</div>
@@ -67,10 +65,7 @@ export default function Page(){
                         </a>
                     </div>
                 </div>
-                <div className="pl-4 flex-grow mb-6" style={{
-                    minWidth:'450px',
-                    flexBasis:'50%',
-                }}>
+                <div className="md:pl-4 flex-grow mb-6 md:w-2/4">
                     <MapElement />
                 </div>
             </div>
