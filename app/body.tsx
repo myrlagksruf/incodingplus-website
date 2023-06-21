@@ -8,6 +8,14 @@ export const ContainerMin:FC<{children:ReactNode,className?:string,isRow?:boolea
     </div>)
 }
 
+export const ContainerMinCurri:FC<{children:ReactNode,className?:string,isRow?:boolean}> = ({children, className, isRow}) => {
+    return (<div className={`flex justify-start w-full box-border ${isRow ? 'flex-row' : 'flex-col'} ${className ?? ''}`} style={{
+        maxWidth:'1200px'
+    }}>
+        {children}
+    </div>)
+}
+
 export const ContainerMain:FC<{children:ReactNode,className?:string}> = ({children, className}) => {
     return (<main className={`flex flex-col items-center justify-between ${className ?? ''}`}>
         {children}

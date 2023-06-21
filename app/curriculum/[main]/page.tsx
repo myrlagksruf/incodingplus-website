@@ -1,4 +1,4 @@
-import { ContainerMin } from "@/app/body";
+import { ContainerMinCurri } from "@/app/body";
 import { getFileOrFolder } from "@/app/mongodb/public/list/[...paths]/db";
 import { MyFile } from "@/app/type";
 import { getS3PublicUrl } from "@/app/utils";
@@ -16,14 +16,14 @@ export default async function Page({params}:{params:{main:string}}){
 
     return(
         <div className="py-4">
-            <ContainerMin className="m-auto">
+            <ContainerMinCurri className="m-auto">
                 <div className="hidden md:block markdown-body">
                     <MDBody mdUrl={desktop} />
                 </div>
                 <div className="md:hidden markdown-body">
                     <MDBody mdUrl={mobile} />
                 </div>
-            </ContainerMin>
+            </ContainerMinCurri>
         </div>
     )
 
