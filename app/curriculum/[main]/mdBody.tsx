@@ -35,6 +35,14 @@ export const MDBody:FC<{ mdUrl: string }> = ({ mdUrl }) => {
                   srcObj.src = result.href;
               }
               return <img {...props} className={className} {...srcObj} />
+          },
+          object({node, className, data, ...props}){
+            const dataObj:{data?:string} = {};
+            if(data){
+                const result = new URL(data, mdUrl);
+                dataObj.data = result.href;
+            }
+            return <object {...props} className={className} {...dataObj} />
           }
       }}
       children={markdown}
