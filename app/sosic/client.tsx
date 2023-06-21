@@ -1,5 +1,5 @@
 'use client'
-import { FC, useRef, useState } from "react";
+import { FC } from "react";
 import { ReactMarkdownWrap } from "../utils/lib";
 import { TabView, TabPanel } from 'primereact/tabview';
 import './client.scss';

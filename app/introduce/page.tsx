@@ -33,7 +33,7 @@ export default function Page(){
                 미래 사회를 준비할 수 있습니다
             </h1>
             <div className="flex flex-wrap justify-center mb-10">
-                <div className="grid items-center flex-grow mb-6" style={{
+                <div className="grid items-center flex-grow mb-6 px-6" style={{
                     gridTemplateColumns:"100px 1fr",
                     minWidth:'450px',
                     flexBasis:'50%'
