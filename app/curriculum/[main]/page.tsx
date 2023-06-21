@@ -15,16 +15,14 @@ export default async function Page({params}:{params:{main:string}}){
     }
 
     return(
-        <div className="py-4">
-            <ContainerMinCurri className="m-auto">
-                <div className="hidden md:block markdown-body">
-                    <MDBody mdUrl={desktop} />
-                </div>
-                <div className="md:hidden markdown-body">
-                    <MDBody mdUrl={mobile} />
-                </div>
-            </ContainerMinCurri>
-        </div>
+        <ContainerMinCurri className="m-auto">
+            <div className="hidden md:block markdown-body">
+                <MDBody mdUrl={desktop} />
+            </div>
+            <div className="md:hidden markdown-body">
+                <MDBody mdUrl={mobile} />
+            </div>
+        </ContainerMinCurri>
     )
 
 }
